@@ -1,11 +1,14 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
+import { useNavigate } from 'react-router-native'; // Importar useNavigate
 import LayoutPage from '../components/LayoutPage'; // Importar LayoutPage
 import HeaderTitle from '../components/HeaderTitle'; // Importar HeaderTitle
 import LargeButton from '../components/LargeButton'; // Importar LargeButton
 
 const NewBitacora = () => {
+  const navigate = useNavigate(); // Inicializar useNavigate
+
   return (
     <LayoutPage
       header={<HeaderTitle titleName="Bitácora de Mantenimiento" />}
@@ -14,7 +17,7 @@ const NewBitacora = () => {
           initialValues={{ tipoAeronave: '', matricula: '', organismo: '', folio: '' }}
           onSubmit={values => {
             console.log(values);
-            // Aquí puedes manejar el envío del formulario
+            navigate('/InfoFlight'); // Navegar a InfoFlight
           }}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (

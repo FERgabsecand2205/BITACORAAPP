@@ -1,17 +1,17 @@
 import React from 'react';
-import { View, StyleSheet,ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 
-const LayoutPage = ({ header, body, buttons, footer }) => {
+const LayoutScrollViewPage = ({ header, body, buttons, footer }) => {
   return (
     <View style={styles.containerPage}>
         <View style={styles.headerContainer}>
           {header}
         </View>
-        <View style={styles.contentBody}>
+        <ScrollView style={styles.contentBody}>
               <View style={styles.body}>
                   {body}
               </View>
-        </View>
+        </ScrollView>
         <View style={styles.buttonContainer}>
               {buttons}
         </View>
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LayoutPage;
+export default LayoutScrollViewPage;
