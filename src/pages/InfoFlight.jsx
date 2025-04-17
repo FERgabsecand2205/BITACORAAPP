@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Formik } from 'formik';
-import DateTimePicker from '@react-native-community/datetimepicker'; // Importar DateTimePicker
-import LayoutScrollViewPage from '../components/LayoutScrollViewPage'; // Cambiar importación
+import DateTimePicker from '@react-native-community/datetimepicker'; 
+import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
+import DropdownButton from '../components/DropdownButton';
+import { useNavigate } from 'react-router-native'; // Importar useNavigate
 
 const InfoFlight = () => {
+  const navigate = useNavigate(); // Cambiar a useNavigate
   const [date, setDate] = React.useState(new Date());
   const [show, setShow] = React.useState(false);
 
@@ -21,10 +24,20 @@ const InfoFlight = () => {
       header={<HeaderTitle titleName="Información de Vuelo" />}
       body={
         <Formik
-          initialValues={{ lugarSalida: '', lugarLlegada: '', tipoVuelo: '', eventosTorque: '', cargaAceiteMotores: '', cargaAceiteAPU: '', fecha: date.toISOString().split('T')[0] }} // Agregar fecha
+          initialValues={{
+            lugarSalida: '',
+            lugarLlegada: '',
+            tipoVuelo: '',
+            eventosTorque: '',
+            cargaAceiteMotores: '',
+            cargaAceiteAPU: '',
+            fecha: date.toISOString().split('T')[0],
+            categoria: '',
+            observaciones: ''
+          }}
           onSubmit={values => {
             console.log(values);
-            // Aquí puedes manejar el envío del formulario
+            navigate('/InfoFlightPt2', { state: { flightData: values } }); // Usar navigate
           }}
         >
           {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => (
@@ -97,10 +110,27 @@ const InfoFlight = () => {
                     display="default"
                     onChange={(event, selectedDate) => {
                       onChange(event, selectedDate);
-                      setFieldValue('fecha', selectedDate.toISOString().split('T')[0]);
+                      if (selectedDate) {
+                        setFieldValue('fecha', selectedDate.toISOString().split('T')[0]);
+                      }
                     }}
                   />
                 )}
+              </View>
+              <DropdownButton
+                title="Categoria"
+                onSelect={(option) => setFieldValue('categoria', option)}
+              />
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Observaciones</Text>
+                <TextInput
+                  style={[styles.input, styles.observacionesInput]}
+                  onChangeText={handleChange('observaciones')}
+                  onBlur={handleBlur('observaciones')}
+                  value={values.observaciones}
+                  multiline={true}
+                  numberOfLines={3}
+                />
               </View>
               <LargeButton 
                 title={<Text style={styles.buttonText}>Continuar</Text>} 
@@ -140,6 +170,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 8,
     width: '100%',
+  },
+  observacionesInput: {
+    height: 80,
+    textAlignVertical: 'top',
+    paddingTop: 8
   },
   buttonText: {
     color: 'white',

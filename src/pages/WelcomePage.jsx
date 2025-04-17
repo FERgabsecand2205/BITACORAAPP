@@ -21,7 +21,7 @@ const WellcomePage = () => {
             buttons={
                 <LargeButton 
                     title="Iniciar" 
-                    onPress={() => navigate('/createnewbitacora')} 
+                    onPress={() => navigate('/newBitacora')} 
                 />
             }
             footer={

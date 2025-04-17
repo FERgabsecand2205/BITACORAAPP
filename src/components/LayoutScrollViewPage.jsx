@@ -29,10 +29,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   headerContainer: {
-    flex: 0.3,
+    minHeight: 50,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
+    paddingTop: 12,
   },
   contentBody: {
     flex: 1,
