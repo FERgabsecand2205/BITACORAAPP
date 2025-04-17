@@ -7,9 +7,24 @@ Bitácora App es una aplicación móvil diseñada para gestionar bitácoras de m
 1. **Pantalla de Bienvenida**: Muestra un mensaje de bienvenida y permite iniciar el flujo de creación de una nueva bitácora.
 2. **Crear Nueva Bitácora**: Permite registrar información básica como nombre, matrícula y referencia.
 3. **Bitácora de Mantenimiento**: Registro de datos específicos de la aeronave, como tipo, matrícula, organismo y folio.
-4. **Información de Vuelo**: Registro de datos del vuelo, como lugar de salida, lugar de llegada, tipo de vuelo, eventos de torque, carga de aceite y fecha.
-5. **Estado de Bitácoras**: Visualización del estado de las aeronaves con alertas basadas en las horas de vuelo.
-6. **Navegación**: Flujo de navegación entre pantallas utilizando `react-router-native`.
+4. **Información de Vuelo**: 
+   - Registro de datos del vuelo, como lugar de salida, lugar de llegada, tipo de vuelo, eventos de torque, carga de aceite y fecha.
+   - Segunda parte del registro de vuelo con información adicional y específica.
+   - Gestión de órdenes de trabajo relacionadas con el vuelo.
+5. **Firmas Digitales**:
+   - Registro de firma de quien entrega la aeronave.
+   - Registro de firma de quien realiza el trabajo.
+   - Registro de firma de quien emite la orden.
+6. **Observaciones y Comentarios**: Sección dedicada para registrar observaciones y comentarios relevantes sobre el mantenimiento.
+7. **Estado de Bitácoras**: Visualización del estado de las aeronaves con alertas basadas en las horas de vuelo.
+8. **Navegación**: Flujo de navegación entre pantallas utilizando `react-router-native`.
+
+## Componentes Nuevos
+
+1. **DropdownButton**: Componente para selección de opciones mediante menú desplegable.
+2. **SegmentedInput**: Componente para entrada de datos segmentada.
+3. **SmallButton**: Versión compacta del botón para acciones secundarias.
+4. **LayoutPage y LayoutScrollViewPage**: Componentes base para la estructura de las páginas con soporte para scroll.
 
 ## Requisitos Previos
 
