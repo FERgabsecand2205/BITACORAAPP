@@ -2,6 +2,21 @@
 
 Bitácora App es una aplicación móvil diseñada para gestionar bitácoras de mantenimiento de aeronaves. Permite registrar información de vuelos, crear nuevas bitácoras, y administrar actividades relacionadas con el mantenimiento de aeronaves.
 
+## Estructura del Proyecto
+
+```
+bitacoraApp/
+├── BITACORAFRONTEND/    # Frontend React Native
+│   ├── src/            # Código fuente del frontend
+│   ├── package.json    # Dependencias del frontend
+│   └── README.md       # Documentación del frontend
+├── BITACORABACKEND/    # Backend Node.js
+│   ├── src/           # Código fuente del backend
+│   └── package.json   # Dependencias del backend
+├── README.md          # Documentación general
+└── LICENSE            # Licencia del proyecto
+```
+
 ## Funcionalidades Actuales
 
 1. **Pantalla de Bienvenida**: Muestra un mensaje de bienvenida y permite iniciar el flujo de creación de una nueva bitácora.
@@ -30,6 +45,7 @@ Bitácora App es una aplicación móvil diseñada para gestionar bitácoras de m
 
 - Node.js (versión 14 o superior)
 - Expo CLI instalado globalmente (`npm install -g expo-cli`)
+- EAS CLI instalado globalmente (`npm install -g eas-cli`)
 
 ## Instalación
 
@@ -39,26 +55,66 @@ Bitácora App es una aplicación móvil diseñada para gestionar bitácoras de m
    cd bitacoraApp
    ```
 
-2. Instala las dependencias:
+2. Instala las dependencias del frontend:
    ```bash
+   cd BITACORAFRONTEND
+   npm install
+   ```
+
+3. Instala las dependencias del backend:
+   ```bash
+   cd ../BITACORABACKEND
    npm install
    ```
 
 ## Ejecución del Proyecto
 
-1. Inicia el servidor de desarrollo:
+1. Inicia el backend:
    ```bash
+   cd BITACORABACKEND
    npm start
    ```
 
-2. Escanea el código QR con la aplicación Expo Go en tu dispositivo móvil o selecciona una opción para ejecutar en un emulador.
+2. Inicia el frontend:
+   ```bash
+   cd ../BITACORAFRONTEND
+   npm start
+   ```
 
-## Estructura del Proyecto
+3. Escanea el código QR con la aplicación Expo Go en tu dispositivo móvil o selecciona una opción para ejecutar en un emulador.
 
-- **`src/components`**: Contiene los componentes reutilizables como botones, encabezados y layouts.
-- **`src/pages`**: Contiene las pantallas principales de la aplicación, como `WelcomePage`, `NewBitacora`, `InfoFlight`, y `HomePage`.
-- **`src/themesBitacora.js`**: Define los estilos globales utilizados en la aplicación.
-- **`App.js`**: Punto de entrada principal de la aplicación.
+## Construcción de Producción
+
+Para generar builds de producción del frontend:
+
+1. Iniciar sesión en Expo:
+   ```bash
+   cd BITACORAFRONTEND
+   eas login
+   ```
+
+2. Configurar el proyecto para builds:
+   ```bash
+   eas build:configure
+   ```
+
+3. Generar builds de producción:
+   - Para web:
+     ```bash
+     eas build --platform web
+     ```
+   - Para Android:
+     ```bash
+     eas build --platform android
+     ```
+   - Para iOS:
+     ```bash
+     eas build --platform ios
+     ```
+   - Para todas las plataformas:
+     ```bash
+     eas build --platform all
+     ```
 
 ## Licencia
 
