@@ -152,6 +152,11 @@ app.put('/api/bitacora/:folio', async (req, res) => {
         if (req.body.categoria !== undefined) updateData.categoria = req.body.categoria;
         if (req.body.observaciones !== undefined) updateData.observaciones = req.body.observaciones;
         if (req.body.correcciones !== undefined) updateData.correcciones = req.body.correcciones;
+        if (req.body.componentes !== undefined) updateData.componentes = req.body.componentes;
+        if (req.body.ordenTrabajo !== undefined) updateData.ordenTrabajo = req.body.ordenTrabajo;
+        if (req.body.ordenSuministro !== undefined) updateData.ordenSuministro = req.body.ordenSuministro;
+        if (req.body.ordenConcentracion !== undefined) updateData.ordenConcentracion = req.body.ordenConcentracion;
+        if (req.body.solicitudComponente !== undefined) updateData.solicitudComponente = req.body.solicitudComponente;
 
         console.log('=== Backend - Intentando actualizar bitácora ===');
         console.log('Folio recibido:', req.params.folio);

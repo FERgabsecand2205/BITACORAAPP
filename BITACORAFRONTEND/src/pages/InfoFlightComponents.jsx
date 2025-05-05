@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import SmallButton from '../components/SmallButton';
 import { useNavigate, useLocation } from 'react-router-native';
+
+const API_URL = 'http://localhost:3001/api';
 
 const InfoFlightComponents = () => {
   const navigate = useNavigate();
@@ -14,6 +16,9 @@ const InfoFlightComponents = () => {
 
   // Inicializar o recuperar el contador y componentes
   useEffect(() => {
+    console.log('=== InfoFlightComponents - Estado inicial ===');
+    console.log('Estado completo recibido:', location.state);
+    
     if (location.state?.componentCount) {
       setComponentCount(location.state.componentCount);
     }
@@ -24,47 +29,92 @@ const InfoFlightComponents = () => {
 
   const handleCreate = (values) => {
     if (componentCount < 3) {
-      // Log del componente actual
-      console.log(`Componente ${componentCount} guardado:`, values);
+      console.log(`=== InfoFlightComponents - Creando componente ${componentCount} ===`);
+      console.log('Valores del componente:', values);
       
       const updatedComponents = [...components, values];
       console.log('Lista actualizada de componentes:', updatedComponents);
       
+      const newState = {
+        components: updatedComponents,
+        componentCount: componentCount + 1,
+        folio: location.state?.folio,
+        flightData: location.state?.flightData,
+        maintenanceData: location.state?.maintenanceData
+      };
+      console.log('Nuevo estado a enviar:', newState);
+      
       navigate('/InfoFlightComponents', {
-        state: {
-          components: updatedComponents,
-          componentCount: componentCount + 1,
-          previousData: location.state?.previousData
-        },
+        state: newState,
         replace: true
       });
     }
   };
 
-  const handleContinue = (values) => {
-    // Log del último componente y todos los componentes
-    console.log(`Componente ${componentCount} (final) guardado:`, values);
-    
-    const allComponents = [...components, values];
-    console.log('Todos los componentes guardados:', allComponents);
-    
-    // Log de todos los datos acumulados
-    console.log('Datos completos:', {
-      componentData: allComponents,
-      previousData: location.state?.previousData
-    });
-
-    navigate('/InfoFlightOrders', {
-      state: {
-        componentData: allComponents,
-        previousData: location.state?.previousData
+  const handleContinue = async (values) => {
+    try {
+      console.log('=== InfoFlightComponents - Continuando con el último componente ===');
+      console.log('Valores del último componente:', values);
+      
+      const allComponents = [...components, values];
+      console.log('Todos los componentes guardados:', allComponents);
+      
+      // Obtener el folio del estado
+      const folio = location.state?.folio;
+      console.log('Folio obtenido del estado:', folio);
+      
+      if (!folio) {
+        console.error('Estado actual:', location.state);
+        throw new Error('No se encontró el folio de la bitácora');
       }
-    });
+
+      console.log('=== InfoFlightComponents - Enviando datos al servidor ===');
+      console.log('URL:', `${API_URL}/bitacora/${folio}`);
+      console.log('Datos a enviar:', { componentes: allComponents });
+
+      // Actualizar la bitácora con los componentes
+      const response = await fetch(`${API_URL}/bitacora/${folio}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          componentes: allComponents
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error del servidor:', errorData);
+        throw new Error('Error al actualizar los componentes');
+      }
+
+      const result = await response.json();
+      console.log('Respuesta del servidor:', result);
+
+      // Navegar a la siguiente página con los datos actualizados
+      const nextState = {
+        componentData: allComponents,
+        folio: folio,
+        flightData: location.state?.flightData,
+        maintenanceData: location.state?.maintenanceData
+      };
+      console.log('Estado a enviar a la siguiente página:', nextState);
+      
+      navigate('/InfoFlightOrders', { state: nextState });
+    } catch (error) {
+      console.error('Error en handleContinue:', error);
+      Alert.alert(
+        'Error',
+        'Hubo un error al guardar los componentes. Por favor, intente nuevamente.'
+      );
+    }
   };
 
   const handleSubmit = (values) => {
-    // Log de los valores del formulario actual
+    console.log('=== InfoFlightComponents - Enviando formulario ===');
     console.log('Valores del formulario actual:', values);
+    console.log('Contador de componentes:', componentCount);
     
     if (componentCount < 3) {
       handleCreate(values);

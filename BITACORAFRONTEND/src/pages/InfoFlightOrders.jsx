@@ -1,18 +1,109 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
 import DropdownButton from '../components/DropdownButton';
-import { useNavigate } from 'react-router-native';
+import { useNavigate, useLocation } from 'react-router-native';
+
+const API_URL = 'http://localhost:3001/api';
 
 const InfoFlightOrders = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Log al recibir el estado
+  React.useEffect(() => {
+    console.log('=== InfoFlightOrders - Estado inicial ===');
+    console.log('Estado completo recibido:', location.state);
+    console.log('Folio recibido:', location.state?.folio);
+    console.log('Datos de componentes:', location.state?.componentData);
+    console.log('Datos de vuelo:', location.state?.flightData);
+    console.log('Datos de mantenimiento:', location.state?.maintenanceData);
+  }, [location.state]);
+
+  const handleSubmit = async (values) => {
+    try {
+      const folio = location.state?.folio;
+      if (!folio) {
+        console.error('Error: No se encontró el folio en el estado:', location.state);
+        throw new Error('No se encontró el folio de la bitácora');
+      }
+
+      console.log('=== InfoFlightOrders - Antes de actualizar ===');
+      console.log('Folio de la bitácora:', folio);
+      console.log('Datos a enviar:', values);
+      console.log('Estado actual completo:', location.state);
+
+      // Validar que los datos no estén vacíos
+      const requiredFields = ['ordenTrabajo', 'ordenSuministro', 'ordenConcentracion', 'solicitudComponente', 'categoria'];
+      const emptyFields = requiredFields.filter(field => !values[field]);
+      
+      if (emptyFields.length > 0) {
+        console.error('Campos vacíos:', emptyFields);
+        throw new Error(`Los siguientes campos son requeridos: ${emptyFields.join(', ')}`);
+      }
+
+      // Actualizar la bitácora con los datos de órdenes
+      const response = await fetch(`${API_URL}/bitacora/${folio}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ordenTrabajo: values.ordenTrabajo,
+          ordenSuministro: values.ordenSuministro,
+          ordenConcentracion: values.ordenConcentracion,
+          solicitudComponente: values.solicitudComponente,
+          categoria: values.categoria
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error del servidor:', errorData);
+        throw new Error('Error al actualizar los datos de órdenes');
+      }
+
+      const result = await response.json();
+      console.log('=== InfoFlightOrders - Después de actualizar ===');
+      console.log('Respuesta completa del servidor:', result);
+      console.log('Datos de la bitácora actualizados:', result.bitacora);
+
+      // Verificar que los datos se hayan guardado correctamente
+      const updatedFields = {
+        ordenTrabajo: result.bitacora.ordenTrabajo,
+        ordenSuministro: result.bitacora.ordenSuministro,
+        ordenConcentracion: result.bitacora.ordenConcentracion,
+        solicitudComponente: result.bitacora.solicitudComponente,
+        categoria: result.bitacora.categoria
+      };
+
+      console.log('Campos actualizados en la base de datos:', updatedFields);
+
+      // Preparar el estado para la siguiente página
+      const nextState = {
+        ...location.state,
+        ordersData: values
+      };
+      console.log('=== InfoFlightOrders - Estado final ===');
+      console.log('Estado a enviar a la siguiente página:', nextState);
+
+      // Navegar a la página de firma
+      navigate('/signatureIssuing', { state: nextState });
+    } catch (error) {
+      console.error('Error en handleSubmit:', error);
+      Alert.alert(
+        'Error',
+        error.message || 'Hubo un error al guardar los datos de órdenes. Por favor, intente nuevamente.'
+      );
+    }
+  };
 
   return (
     <LayoutScrollViewPage 
-      header={<HeaderTitle titleName="Componentes involucrados" />}
+      header={<HeaderTitle titleName="Órdenes y Solicitudes" />}
       body={
         <Formik
           initialValues={{ 
@@ -22,57 +113,84 @@ const InfoFlightOrders = () => {
             solicitudComponente: '',
             categoria: ''
           }}
-          onSubmit={values => {
-            console.log(values);
-            navigate('/signatureIssuing');
+          onSubmit={handleSubmit}
+          validate={values => {
+            const errors = {};
+            if (!values.ordenTrabajo) errors.ordenTrabajo = 'La orden de trabajo es requerida';
+            if (!values.ordenSuministro) errors.ordenSuministro = 'La orden de suministro es requerida';
+            if (!values.ordenConcentracion) errors.ordenConcentracion = 'La orden de concentración es requerida';
+            if (!values.solicitudComponente) errors.solicitudComponente = 'La solicitud de componente es requerida';
+            if (!values.categoria) errors.categoria = 'La categoría es requerida';
+            return errors;
           }}
         >
-          {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => (
+          {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, errors, touched }) => (
             <View style={styles.body}>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Orden de trabajo</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, touched.ordenTrabajo && errors.ordenTrabajo && styles.inputError]}
                   onChangeText={handleChange('ordenTrabajo')}
                   onBlur={handleBlur('ordenTrabajo')}
                   value={values.ordenTrabajo}
                 />
+                {touched.ordenTrabajo && errors.ordenTrabajo && (
+                  <Text style={styles.errorText}>{errors.ordenTrabajo}</Text>
+                )}
               </View>
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Orden se suministro</Text>
+                <Text style={styles.label}>Orden de suministro</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, touched.ordenSuministro && errors.ordenSuministro && styles.inputError]}
                   onChangeText={handleChange('ordenSuministro')}
                   onBlur={handleBlur('ordenSuministro')}
                   value={values.ordenSuministro}
                 />
+                {touched.ordenSuministro && errors.ordenSuministro && (
+                  <Text style={styles.errorText}>{errors.ordenSuministro}</Text>
+                )}
               </View>
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>Orden de concentracion</Text>
+                <Text style={styles.label}>Orden de concentración</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, touched.ordenConcentracion && errors.ordenConcentracion && styles.inputError]}
                   onChangeText={handleChange('ordenConcentracion')}
                   onBlur={handleBlur('ordenConcentracion')}
                   value={values.ordenConcentracion}
                 />
+                {touched.ordenConcentracion && errors.ordenConcentracion && (
+                  <Text style={styles.errorText}>{errors.ordenConcentracion}</Text>
+                )}
               </View>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Solicitud de componente</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, touched.solicitudComponente && errors.solicitudComponente && styles.inputError]}
                   onChangeText={handleChange('solicitudComponente')}
                   onBlur={handleBlur('solicitudComponente')}
                   value={values.solicitudComponente}
                 />
+                {touched.solicitudComponente && errors.solicitudComponente && (
+                  <Text style={styles.errorText}>{errors.solicitudComponente}</Text>
+                )}
               </View>
               <DropdownButton
-                title="Categoria"
-                onSelect={(option) => setFieldValue('categoria', option)}
+                title="Categoría"
+                onSelect={(option) => {
+                  console.log('Categoría seleccionada:', option);
+                  setFieldValue('categoria', option);
+                }}
               />
+              {touched.categoria && errors.categoria && (
+                <Text style={styles.errorText}>{errors.categoria}</Text>
+              )}
               <View style={styles.buttonContainer}>
                 <LargeButton 
                   title="Continuar"
-                  onPress={handleSubmit}
+                  onPress={() => {
+                    console.log('Valores del formulario antes de enviar:', values);
+                    handleSubmit();
+                  }}
                 />
               </View>
             </View>
@@ -104,6 +222,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 8,
     width: '100%',
+  },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 2,
   },
   buttonContainer: {
     width: '100%',
