@@ -1,0 +1,68 @@
+.body {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.form-container {
+  width: 100%;
+}
+
+.input-group {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.label {
+  text-align: left;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.input {
+  height: 40px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  padding-left: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-error {
+  border-color: red;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.signature-section {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.signature-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.signature-image {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 10px;
+  border: 1px solid gray;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.button-container {
+  width: 100%;
+  margin-top: 20px;
+} 

@@ -6,9 +6,10 @@ const path = require('path');
 const connectDB = require('./config/database');
 const Bitacora = require('./models/Bitacora');
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -30,26 +31,44 @@ const updateBackupFile = async () => {
 
 // Ruta para crear una nueva bitácora
 app.post('/api/bitacora', async (req, res) => {
-    const data = req.body;
-    
-    // Validar solo los campos de la primera página
-    if (!data.tipoAeronave || !data.matricula || !data.organismo || !data.folio) {
-        return res.status(400).json({ error: 'Todos los campos de la primera página son requeridos' });
-    }
-
     try {
-        // Verificar si ya existe una bitácora con el mismo folio
-        const existingBitacora = await Bitacora.findOne({ folio: data.folio });
-        if (existingBitacora) {
-            return res.status(400).json({ error: 'Ya existe una bitácora con este folio' });
+        console.log('=== POST /api/bitacora ===');
+        console.log('Datos recibidos:', req.body);
+        
+        const data = req.body;
+        
+        // Validar solo los campos de la primera página
+        if (!data.tipoAeronave || !data.matricula || !data.organismo || !data.folio) {
+            console.log('Error: Faltan campos requeridos');
+            return res.status(400).json({ 
+                error: 'Todos los campos de la primera página son requeridos',
+                details: {
+                    tipoAeronave: !data.tipoAeronave,
+                    matricula: !data.matricula,
+                    organismo: !data.organismo,
+                    folio: !data.folio
+                }
+            });
         }
 
-        // Crear nueva bitácora
+        // Verificar si ya existe una bitácora con el mismo folio
+        console.log('Verificando folio duplicado:', data.folio);
+        const existingBitacora = await Bitacora.findOne({ folio: data.folio });
+        if (existingBitacora) {
+            console.log('Error: Folio duplicado encontrado');
+            return res.status(400).json({ 
+                error: 'Ya existe una bitácora con este folio',
+                details: { folio: data.folio }
+            });
+        }
+
+        // Crear nueva bitácora con valores iniciales
+        console.log('Creando nueva bitácora...');
         const bitacora = new Bitacora({
-            tipoAeronave: data.tipoAeronave,
-            matricula: data.matricula,
-            organismo: data.organismo,
-            folio: data.folio,
+            tipoAeronave: data.tipoAeronave.trim(),
+            matricula: data.matricula.trim(),
+            organismo: data.organismo.trim(),
+            folio: data.folio.trim(),
             // Inicializar campos vacíos
             lugarSalida: '',
             lugarLlegada: '',
@@ -65,23 +84,35 @@ app.post('/api/bitacora', async (req, res) => {
             ordenTrabajo: '',
             ordenSuministro: '',
             ordenConcentracion: '',
-            solicitudComponente: ''
+            solicitudComponente: '',
+            // Inicializar campos de firma como null
+            signatureIssuing: null,
+            signatureDoer: null,
+            signatureDelivery: null
         });
 
         // Guardar la bitácora
-        await bitacora.save();
+        console.log('Guardando bitácora...');
+        const savedBitacora = await bitacora.save();
+        console.log('Bitácora guardada:', savedBitacora._id);
 
         // Actualizar archivo de respaldo
+        console.log('Actualizando archivo de respaldo...');
         await updateBackupFile();
+        console.log('Archivo de respaldo actualizado');
 
         res.status(201).json({ 
             message: 'Bitácora creada exitosamente',
-            folio: bitacora.folio,
-            _id: bitacora._id
+            folio: savedBitacora.folio,
+            _id: savedBitacora._id
         });
     } catch (error) {
         console.error('Error al crear la bitácora:', error);
-        res.status(500).json({ error: 'Error al crear la bitácora' });
+        res.status(500).json({ 
+            error: 'Error al crear la bitácora',
+            details: error.message,
+            stack: error.stack
+        });
     }
 });
 
@@ -175,7 +206,10 @@ app.put('/api/bitacora/:folio', async (req, res) => {
             await updateBackupFile();
             res.json({ 
                 message: 'Bitácora actualizada exitosamente',
-                bitacora: bitacora
+                bitacora: {
+                    ...bitacora.toObject(),
+                    _id: bitacora._id
+                }
             });
         } else {
             console.log('=== Backend - Bitácora no encontrada ===');
@@ -259,6 +293,87 @@ app.patch('/api/bitacora/:folio/correcciones', async (req, res) => {
         console.error('Error al agregar la corrección:', error);
         res.status(500).json({ error: 'Error al agregar la corrección' });
     }
+});
+
+// Endpoint para guardar datos de firma de emisión
+app.post('/api/bitacora/signature-issuing', async (req, res) => {
+  try {
+    console.log('=== POST /api/bitacora/signature-issuing ===');
+    console.log('Datos recibidos:', {
+      ...req.body,
+      firma: req.body.firma ? {
+        ...req.body.firma,
+        data: req.body.firma.data.substring(0, 50) + '...'
+      } : null
+    });
+
+    const { grado, nombre, matricula, firma, bitacoraId } = req.body;
+
+    // Validar campos requeridos
+    if (!grado || !nombre || !matricula || !firma || !bitacoraId) {
+      return res.status(400).json({
+        error: 'Faltan campos requeridos',
+        details: 'Se requieren: grado, nombre, matricula, firma y bitacoraId'
+      });
+    }
+
+    // Validar formato de la firma
+    if (!firma.data || !firma.type) {
+      return res.status(400).json({
+        error: 'Formato de firma inválido',
+        details: 'La firma debe contener data y type'
+      });
+    }
+
+    // Buscar la bitácora
+    const bitacora = await Bitacora.findById(bitacoraId);
+    if (!bitacora) {
+      return res.status(404).json({
+        error: 'Bitácora no encontrada',
+        details: `No se encontró la bitácora con ID: ${bitacoraId}`
+      });
+    }
+
+    // Crear objeto de firma con el formato correcto
+    const signatureData = {
+      grado: grado.trim(),
+      nombre: nombre.trim(),
+      matricula: matricula.trim(),
+      firma: {
+        data: firma.data,
+        type: firma.type
+      },
+      fecha: new Date()
+    };
+
+    console.log('Datos de firma a guardar:', {
+      ...signatureData,
+      firma: {
+        ...signatureData.firma,
+        data: signatureData.firma.data.substring(0, 50) + '...'
+      }
+    });
+
+    // Actualizar la bitácora
+    bitacora.signatureIssuing = signatureData;
+    const savedBitacora = await bitacora.save();
+    console.log('Bitácora actualizada:', savedBitacora._id);
+
+    // Actualizar archivo de respaldo
+    await updateBackupFile();
+
+    res.json({
+      message: 'Datos de firma guardados correctamente',
+      bitacora: savedBitacora
+    });
+  } catch (error) {
+    console.error('Error al guardar los datos de firma:', error);
+    res.status(500).json({
+      error: 'Error al guardar los datos',
+      details: error.message,
+      stack: error.stack
+    });
+  }
 });
 
 app.listen(PORT, () => {

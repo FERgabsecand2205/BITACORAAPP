@@ -2,33 +2,180 @@ const mongoose = require('mongoose');
 
 const bitacoraSchema = new mongoose.Schema({
     // Campos de la primera página
-    tipoAeronave: String,
-    matricula: String,
-    organismo: String,
-    folio: String,
+    tipoAeronave: {
+        type: String,
+        required: true
+    },
+    matricula: {
+        type: String,
+        required: true
+    },
+    organismo: {
+        type: String,
+        required: true
+    },
+    folio: {
+        type: String,
+        required: true,
+        unique: true
+    },
     // Campos de InfoFlight (no requeridos inicialmente)
-    lugarSalida: String,
-    lugarLlegada: String,
-    tipoVuelo: String,
-    eventosTorque: String,
-    cargaAceiteMotores: String,
-    cargaAceiteAPU: String,
-    fecha: Date,
-    categoria: String,
-    observaciones: String,
+    lugarSalida: {
+        type: String,
+        default: ''
+    },
+    lugarLlegada: {
+        type: String,
+        default: ''
+    },
+    tipoVuelo: {
+        type: String,
+        default: ''
+    },
+    eventosTorque: {
+        type: String,
+        default: ''
+    },
+    cargaAceiteMotores: {
+        type: String,
+        default: ''
+    },
+    cargaAceiteAPU: {
+        type: String,
+        default: ''
+    },
+    fecha: {
+        type: Date,
+        default: null
+    },
+    categoria: {
+        type: String,
+        default: ''
+    },
+    observaciones: {
+        type: String,
+        default: ''
+    },
     // Campos de InfoFlightPt2 (no requeridos inicialmente)
     correcciones: [{
-        type: mongoose.Schema.Types.Mixed
+        texto: String,
+        fecha: Date,
+        usuario: String
     }],
     // Campos de InfoFlightComponents (no requeridos inicialmente)
     componentes: [{
-        type: mongoose.Schema.Types.Mixed
+        nombre: String,
+        cantidad: Number,
+        unidad: String
     }],
     // Campos de InfoFlightOrders (no requeridos inicialmente)
-    ordenTrabajo: String,
-    ordenSuministro: String,
-    ordenConcentracion: String,
-    solicitudComponente: String
+    ordenTrabajo: {
+        type: String,
+        default: ''
+    },
+    ordenSuministro: {
+        type: String,
+        default: ''
+    },
+    ordenConcentracion: {
+        type: String,
+        default: ''
+    },
+    solicitudComponente: {
+        type: String,
+        default: ''
+    },
+    // Datos de la firma de emisión
+    signatureIssuing: {
+        grado: {
+            type: String,
+            required: false
+        },
+        nombre: {
+            type: String,
+            required: false
+        },
+        matricula: {
+            type: String,
+            required: false
+        },
+        firma: {
+            data: {
+                type: String,
+                required: false
+            },
+            type: {
+                type: String,
+                required: false
+            }
+        },
+        fecha: {
+            type: Date,
+            default: null
+        }
+    },
+    // Datos de la firma de realización
+    signatureDoer: {
+        grado: {
+            type: String,
+            required: false
+        },
+        nombre: {
+            type: String,
+            required: false
+        },
+        matricula: {
+            type: String,
+            required: false
+        },
+        mel: {
+            type: String,
+            required: false
+        },
+        firma: {
+            data: {
+                type: String,
+                required: false
+            },
+            type: {
+                type: String,
+                required: false
+            }
+        },
+        fecha: {
+            type: Date,
+            default: null
+        }
+    },
+    // Datos de la firma de entrega
+    signatureDelivery: {
+        grado: {
+            type: String,
+            required: false
+        },
+        nombre: {
+            type: String,
+            required: false
+        },
+        matricula: {
+            type: String,
+            required: false
+        },
+        firma: {
+            data: {
+                type: String,
+                required: false
+            },
+            type: {
+                type: String,
+                required: false
+            }
+        },
+        fecha: {
+            type: Date,
+            default: null
+        }
+    }
 }, {
     timestamps: true
 });

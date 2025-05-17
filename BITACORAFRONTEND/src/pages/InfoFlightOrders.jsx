@@ -77,7 +77,7 @@ const InfoFlightOrders = () => {
         ordenSuministro: result.bitacora.ordenSuministro,
         ordenConcentracion: result.bitacora.ordenConcentracion,
         solicitudComponente: result.bitacora.solicitudComponente,
-        categoria: result.bitacora.categoria
+        categoria: result.bitacora.categoria,
       };
 
       console.log('Campos actualizados en la base de datos:', updatedFields);
@@ -85,10 +85,17 @@ const InfoFlightOrders = () => {
       // Preparar el estado para la siguiente página
       const nextState = {
         ...location.state,
-        ordersData: values
+        ordersData: values,
+        bitacoraId: result.bitacora._id,
+        formData: {
+          ...location.state?.formData,
+          ordersData: values,
+        },
       };
+
       console.log('=== InfoFlightOrders - Estado final ===');
       console.log('Estado a enviar a la siguiente página:', nextState);
+      console.log('BitacoraId a enviar:', result.bitacora._id);
 
       // Navegar a la página de firma
       navigate('/signatureIssuing', { state: nextState });

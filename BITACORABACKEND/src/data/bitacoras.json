@@ -1,16 +1,20 @@
 [
   {
-    "tipoAeronave": "Aeronave 1",
-    "matricula": "1234",
-    "organismo": "Sedena",
-    "folio": "2024-001",
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "6828337468562c8a6179486d",
+    "tipoAeronave": "Prueba",
+    "matricula": "TEST-001",
+    "organismo": "Test",
+    "folio": "TEST-001",
     "lugarSalida": "",
     "lugarLlegada": "",
     "tipoVuelo": "",
     "eventosTorque": "",
     "cargaAceiteMotores": "",
     "cargaAceiteAPU": "",
-    "fecha": null,
+    "fecha": "2025-05-17T06:57:56.832Z",
     "categoria": "",
     "observaciones": "",
     "correcciones": [],
@@ -19,5 +23,325 @@
     "ordenSuministro": "",
     "ordenConcentracion": "",
     "solicitudComponente": ""
+  },
+  {
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "682833b227d69d205a5ec970",
+    "tipoAeronave": "a",
+    "matricula": "1",
+    "organismo": "a",
+    "folio": "1",
+    "lugarSalida": "a",
+    "lugarLlegada": "q",
+    "tipoVuelo": "a",
+    "eventosTorque": "1",
+    "cargaAceiteMotores": "1",
+    "cargaAceiteAPU": "1",
+    "fecha": "2025-05-17T00:00:00.000Z",
+    "categoria": "A",
+    "observaciones": "",
+    "correcciones": [
+      {
+        "fecha": "2025-05-17T00:00:00.000Z",
+        "_id": "682833c127d69d205a5ec975"
+      }
+    ],
+    "componentes": [
+      {
+        "_id": "682833c627d69d205a5ec97a"
+      },
+      {
+        "_id": "682833c627d69d205a5ec97b"
+      },
+      {
+        "_id": "682833c627d69d205a5ec97c"
+      }
+    ],
+    "ordenTrabajo": "1",
+    "ordenSuministro": "1",
+    "ordenConcentracion": "1",
+    "solicitudComponente": "1"
+  },
+  {
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "6828347d27d69d205a5ec997",
+    "tipoAeronave": "a",
+    "matricula": "1",
+    "organismo": "a",
+    "folio": "2",
+    "lugarSalida": "q",
+    "lugarLlegada": "a",
+    "tipoVuelo": "1",
+    "eventosTorque": "1",
+    "cargaAceiteMotores": "1",
+    "cargaAceiteAPU": "1",
+    "fecha": "2025-05-17T00:00:00.000Z",
+    "categoria": "A",
+    "observaciones": "",
+    "correcciones": [
+      {
+        "fecha": "2025-05-17T00:00:00.000Z",
+        "_id": "6828348c27d69d205a5ec9a4"
+      }
+    ],
+    "componentes": [
+      {
+        "_id": "6828349127d69d205a5ec9ad"
+      },
+      {
+        "_id": "6828349127d69d205a5ec9ae"
+      },
+      {
+        "_id": "6828349127d69d205a5ec9af"
+      }
+    ],
+    "ordenTrabajo": "1",
+    "ordenSuministro": "1",
+    "ordenConcentracion": "11",
+    "solicitudComponente": "1"
+  },
+  {
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "682836ec1be127fff5c27270",
+    "tipoAeronave": "a",
+    "matricula": "a",
+    "organismo": "a",
+    "folio": "11",
+    "lugarSalida": "q",
+    "lugarLlegada": "a",
+    "tipoVuelo": "a1",
+    "eventosTorque": "1",
+    "cargaAceiteMotores": "1",
+    "cargaAceiteAPU": "1",
+    "fecha": "2025-05-17T00:00:00.000Z",
+    "categoria": "A",
+    "observaciones": "",
+    "correcciones": [
+      {
+        "fecha": "2025-05-17T00:00:00.000Z",
+        "_id": "682836f91be127fff5c27285"
+      }
+    ],
+    "componentes": [
+      {
+        "_id": "682837001be127fff5c27292"
+      },
+      {
+        "_id": "682837001be127fff5c27293"
+      },
+      {
+        "_id": "682837001be127fff5c27294"
+      }
+    ],
+    "ordenTrabajo": "1",
+    "ordenSuministro": "1",
+    "ordenConcentracion": "1",
+    "solicitudComponente": "1"
+  },
+  {
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "68283b191be127fff5c272c7",
+    "tipoAeronave": "a",
+    "matricula": "1",
+    "organismo": "a",
+    "folio": "12",
+    "lugarSalida": "a",
+    "lugarLlegada": "q",
+    "tipoVuelo": "q",
+    "eventosTorque": "1",
+    "cargaAceiteMotores": "1",
+    "cargaAceiteAPU": "1",
+    "fecha": "2025-05-17T00:00:00.000Z",
+    "categoria": "A",
+    "observaciones": "",
+    "correcciones": [
+      {
+        "fecha": "2025-05-17T00:00:00.000Z",
+        "_id": "68283b241be127fff5c272e4"
+      }
+    ],
+    "componentes": [
+      {
+        "_id": "68283b291be127fff5c2730e"
+      },
+      {
+        "_id": "68283b291be127fff5c2730f"
+      },
+      {
+        "_id": "68283b291be127fff5c27310"
+      }
+    ],
+    "ordenTrabajo": "1",
+    "ordenSuministro": "1",
+    "ordenConcentracion": "1",
+    "solicitudComponente": "1"
+  },
+  {
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "68283cd51be127fff5c2734f",
+    "tipoAeronave": "q",
+    "matricula": "1",
+    "organismo": "q",
+    "folio": "123",
+    "lugarSalida": "q",
+    "lugarLlegada": "q",
+    "tipoVuelo": "q",
+    "eventosTorque": "1",
+    "cargaAceiteMotores": "1",
+    "cargaAceiteAPU": "1",
+    "fecha": "2025-05-17T00:00:00.000Z",
+    "categoria": "A",
+    "observaciones": "",
+    "correcciones": [
+      {
+        "fecha": "2025-05-17T00:00:00.000Z",
+        "_id": "68283ce21be127fff5c27374"
+      }
+    ],
+    "componentes": [
+      {
+        "_id": "68283ce61be127fff5c27389"
+      },
+      {
+        "_id": "68283ce61be127fff5c2738a"
+      },
+      {
+        "_id": "68283ce61be127fff5c2738b"
+      }
+    ],
+    "ordenTrabajo": "1",
+    "ordenSuministro": "1",
+    "ordenConcentracion": "1",
+    "solicitudComponente": "1"
+  },
+  {
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "68283d8e1be127fff5c273d6",
+    "tipoAeronave": "q",
+    "matricula": "1",
+    "organismo": "q",
+    "folio": "1234",
+    "lugarSalida": "q",
+    "lugarLlegada": "q",
+    "tipoVuelo": "q",
+    "eventosTorque": "1",
+    "cargaAceiteMotores": "1",
+    "cargaAceiteAPU": "1",
+    "fecha": "2025-05-17T00:00:00.000Z",
+    "categoria": "B",
+    "observaciones": "",
+    "correcciones": [
+      {
+        "fecha": "2025-05-17T00:00:00.000Z",
+        "_id": "68283d9a1be127fff5c27403"
+      }
+    ],
+    "componentes": [
+      {
+        "_id": "68283d9f1be127fff5c2741c"
+      },
+      {
+        "_id": "68283d9f1be127fff5c2741d"
+      },
+      {
+        "_id": "68283d9f1be127fff5c2741e"
+      }
+    ],
+    "ordenTrabajo": "1",
+    "ordenSuministro": "1",
+    "ordenConcentracion": "1",
+    "solicitudComponente": "1"
+  },
+  {
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "68283f151be127fff5c27475",
+    "tipoAeronave": "a",
+    "matricula": "1",
+    "organismo": "a",
+    "folio": "12345",
+    "lugarSalida": "q",
+    "lugarLlegada": "q",
+    "tipoVuelo": "q",
+    "eventosTorque": "1",
+    "cargaAceiteMotores": "1",
+    "cargaAceiteAPU": "1",
+    "fecha": "2025-05-17T00:00:00.000Z",
+    "categoria": "A",
+    "observaciones": "",
+    "correcciones": [
+      {
+        "fecha": "2025-05-17T00:00:00.000Z",
+        "_id": "68283f231be127fff5c274aa"
+      }
+    ],
+    "componentes": [
+      {
+        "_id": "68283f281be127fff5c274c7"
+      },
+      {
+        "_id": "68283f281be127fff5c274c8"
+      },
+      {
+        "_id": "68283f281be127fff5c274c9"
+      }
+    ],
+    "ordenTrabajo": "1",
+    "ordenSuministro": "1",
+    "ordenConcentracion": "1",
+    "solicitudComponente": "1"
+  },
+  {
+    "signatureIssuing": null,
+    "signatureDoer": null,
+    "signatureDelivery": null,
+    "_id": "682841601be127fff5c2752c",
+    "tipoAeronave": "q",
+    "matricula": "1",
+    "organismo": "q",
+    "folio": "321",
+    "lugarSalida": "q",
+    "lugarLlegada": "a",
+    "tipoVuelo": "a",
+    "eventosTorque": "1",
+    "cargaAceiteMotores": "1",
+    "cargaAceiteAPU": "1",
+    "fecha": "2025-05-17T00:00:00.000Z",
+    "categoria": "A",
+    "observaciones": "",
+    "correcciones": [
+      {
+        "fecha": "2025-05-17T00:00:00.000Z",
+        "_id": "6828416c1be127fff5c27569"
+      }
+    ],
+    "componentes": [
+      {
+        "_id": "682841711be127fff5c275b3"
+      },
+      {
+        "_id": "682841711be127fff5c275b4"
+      },
+      {
+        "_id": "682841711be127fff5c275b5"
+      }
+    ],
+    "ordenTrabajo": "1",
+    "ordenSuministro": "1",
+    "ordenConcentracion": "1",
+    "solicitudComponente": "1"
   }
-] 
+]

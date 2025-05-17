@@ -18,6 +18,37 @@
     "ordenTrabajo": "",
     "ordenSuministro": "",
     "ordenConcentracion": "",
-    "solicitudComponente": ""
+    "solicitudComponente": "",
+    "signatureIssuing": {
+      "grado": "",
+      "nombre": "",
+      "matricula": "",
+      "firma": {
+        "data": "",
+        "type": ""
+      },
+      "fecha": null
+    },
+    "signatureDoer": {
+      "grado": "",
+      "nombre": "",
+      "matricula": "",
+      "firma": {
+        "data": "",
+        "type": ""
+      },
+      "mel": "",
+      "fecha": null
+    },
+    "signatureDelivery": {
+      "grado": "",
+      "nombre": "",
+      "matricula": "",
+      "firma": {
+        "data": "",
+        "type": ""
+      },
+      "fecha": null
+    }
   }
 ] 
