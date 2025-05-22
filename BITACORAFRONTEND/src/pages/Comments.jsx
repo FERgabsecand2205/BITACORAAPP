@@ -1,13 +1,65 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
-import { useNavigate } from 'react-router-native';
+import { useNavigate, useLocation } from 'react-router-native';
 
 const Comments = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { bitacoraId } = location.state || {};
+
+  const handleSubmit = async (values) => {
+    try {
+      if (!bitacoraId) {
+        Alert.alert('Error', 'No se encontró el ID de la bitácora');
+        return;
+      }
+
+      // 1. Actualizar la bitácora con los comentarios
+      const updateResponse = await fetch(`http://localhost:3001/api/bitacora/id/${bitacoraId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          observaciones: values.comments,
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        throw new Error('Error al actualizar los comentarios');
+      }
+
+      // 2. Exportar a Excel
+      const excelResponse = await fetch(`http://localhost:3001/api/bitacora/${bitacoraId}/export-excel`, {
+        method: 'POST',
+      });
+
+      if (!excelResponse.ok) {
+        throw new Error('Error al exportar a Excel');
+      }
+
+      // 3. Descargar el archivo
+      const blob = await excelResponse.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `BITACORA-${bitacoraId}.xlsx`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      Alert.alert('Éxito', 'Bitácora exportada exitosamente');
+      navigate('/'); // Volver a la página principal
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', error.message || 'Hubo un problema al procesar la solicitud');
+    }
+  };
 
   return (
     <LayoutScrollViewPage 
@@ -15,12 +67,9 @@ const Comments = () => {
       body={
         <Formik
           initialValues={{ 
-            comments: ''
+            comments: '',
           }}
-          onSubmit={values => {
-            console.log(values);
-            // Handle form submission
-          }}
+          onSubmit={handleSubmit}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View style={styles.body}>
@@ -77,7 +126,7 @@ const styles = StyleSheet.create({
     width: '80%',
     marginTop: 20,
     marginBottom: 20,
-  }
+  },
 });
 
 export default Comments; 

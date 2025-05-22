@@ -31,9 +31,9 @@ const NewBitacora = () => {
             [
               {
                 text: 'Entendido',
-                style: 'cancel'
-              }
-            ]
+                style: 'cancel',
+              },
+            ],
           );
           return;
         }
@@ -44,19 +44,19 @@ const NewBitacora = () => {
       console.log('=== NewBitacora - Bitácora creada exitosamente ===');
       console.log('ID recibido del backend:', data._id);
       console.log('Folio:', values.folio);
-      
+
       Alert.alert('Éxito', 'Bitácora creada exitosamente');
-      navigate('/InfoFlight', { 
-        state: { 
+      navigate('/InfoFlight', {
+        state: {
           folio: values.folio,
-          bitacoraId: data._id 
-        } 
+          bitacoraId: data._id,
+        },
       });
-      
+
       console.log('=== NewBitacora - Después de navegar ===');
       console.log('Estado de navegación enviado:', {
         folio: values.folio,
-        bitacoraId: data._id
+        bitacoraId: data._id,
       });
     } catch (error) {
       console.error('Error completo:', error);

@@ -133,19 +133,25 @@ const SignatureIssuing = () => {
 
             console.log('=== SignatureIssuing - Navegando a SignatureDoer ===');
             console.log('Estado a enviar:', {
-                ...originalState,
                 bitacoraId: bitacoraId,
                 formData: values,
                 signature: signatureImage,
             });
 
+            // Logs adicionales para depuración
+            console.log('=== SignatureIssuing - Debug Info ===');
+            console.log('URL de navegación:', '/signatureDoer');
+            console.log('Estado actual del componente:', {
+                bitacoraId,
+                signatureImage: signatureImage ? 'Presente' : 'No presente',
+                formValues: values,
+                error,
+            });
+
             // Navegar a SignatureDoer con los datos necesarios
             navigate('/signatureDoer', {
                 state: {
-                    ...originalState,
                     bitacoraId: bitacoraId,
-                    formData: values,
-                    signature: signatureImage,
                 },
             });
         } catch (error) {
