@@ -6,6 +6,7 @@ const path = require('path');
 const connectDB = require('./config/database');
 const Bitacora = require('./models/Bitacora');
 const mongoose = require('mongoose');
+const exportBitacoraToExcel = require('./utils/exportToExcel');
 require('dotenv').config();
 
 const app = express();
@@ -373,6 +374,187 @@ app.post('/api/bitacora/signature-issuing', async (req, res) => {
       details: error.message,
       stack: error.stack
     });
+    }
+});
+
+// Endpoint para guardar datos de firma de quien realizó las acciones
+app.post('/api/bitacora/signature-doer', async (req, res) => {
+  try {
+    console.log('=== POST /api/bitacora/signature-doer ===');
+    console.log('Datos recibidos:', {
+      ...req.body,
+      firma: req.body.firma ? {
+        ...req.body.firma,
+        data: req.body.firma.data.substring(0, 50) + '...'
+      } : null
+    });
+
+    const { grado, nombre, matricula, mel, firma, bitacoraId } = req.body;
+
+    // Validar campos requeridos
+    if (!grado || !nombre || !matricula || !mel || !firma || !bitacoraId) {
+      return res.status(400).json({
+        error: 'Faltan campos requeridos',
+        details: 'Se requieren: grado, nombre, matricula, mel, firma y bitacoraId'
+      });
+    }
+
+    // Validar formato de la firma
+    if (!firma.data || !firma.type) {
+      return res.status(400).json({
+        error: 'Formato de firma inválido',
+        details: 'La firma debe contener data y type'
+      });
+    }
+
+    // Buscar la bitácora
+    const bitacora = await Bitacora.findById(bitacoraId);
+    if (!bitacora) {
+      return res.status(404).json({
+        error: 'Bitácora no encontrada',
+        details: `No se encontró la bitácora con ID: ${bitacoraId}`
+      });
+    }
+
+    // Crear objeto de firma con el formato correcto
+    const signatureData = {
+      grado: grado.trim(),
+      nombre: nombre.trim(),
+      matricula: matricula.trim(),
+      mel: mel.trim(),
+      firma: {
+        data: firma.data,
+        type: firma.type
+      },
+      fecha: new Date()
+    };
+
+    console.log('Datos de firma a guardar:', {
+      ...signatureData,
+      firma: {
+        ...signatureData.firma,
+        data: signatureData.firma.data.substring(0, 50) + '...'
+      }
+    });
+
+    // Actualizar la bitácora
+    bitacora.signatureDoer = signatureData;
+    const savedBitacora = await bitacora.save();
+    console.log('Bitácora actualizada:', savedBitacora._id);
+
+    // Actualizar archivo de respaldo
+    await updateBackupFile();
+
+    res.json({
+      message: 'Datos de firma guardados correctamente',
+      bitacora: savedBitacora
+    });
+  } catch (error) {
+    console.error('Error al guardar los datos de firma:', error);
+    res.status(500).json({
+      error: 'Error al guardar los datos',
+      details: error.message,
+      stack: error.stack
+    });
+  }
+});
+
+// Endpoint para guardar la firma de entrega
+app.post('/api/bitacora/signature-delivery', async (req, res) => {
+  try {
+    console.log('=== Endpoint: /api/bitacora/signature-delivery ===');
+    console.log('Datos recibidos:', {
+      ...req.body,
+      firma: req.body.firma ? {
+        ...req.body.firma,
+        data: req.body.firma.data.substring(0, 50) + '...'
+      } : null
+    });
+
+    const { grado, nombre, matricula, firma, bitacoraId } = req.body;
+
+    // Validar campos requeridos
+    if (!grado || !nombre || !matricula || !firma || !bitacoraId) {
+      console.log('Error: Faltan campos requeridos');
+      return res.status(400).json({ message: 'Faltan campos requeridos' });
+    }
+
+    // Validar formato de la firma
+    if (!firma.data || !firma.type) {
+      console.log('Error: Formato de firma inválido');
+      return res.status(400).json({ message: 'Formato de firma inválido' });
+    }
+
+    // Buscar la bitácora
+    const bitacora = await Bitacora.findById(bitacoraId);
+    if (!bitacora) {
+      console.log('Error: Bitácora no encontrada');
+      return res.status(404).json({ message: 'Bitácora no encontrada' });
+    }
+
+    // Crear objeto con los datos de la firma
+    const signatureData = {
+      grado: grado.trim(),
+      nombre: nombre.trim(),
+      matricula: matricula.trim(),
+      firma: {
+        data: firma.data,
+        type: firma.type
+      },
+      fecha: new Date(),
+    };
+
+    // Actualizar la bitácora con los datos de la firma
+    bitacora.signatureDelivery = signatureData;
+    await bitacora.save();
+
+    // Actualizar el archivo de respaldo
+    await updateBackupFile();
+
+    console.log('Firma de entrega guardada exitosamente');
+    res.json({ message: 'Firma de entrega guardada exitosamente' });
+  } catch (error) {
+    console.error('Error al guardar la firma de entrega:', error);
+    res.status(500).json({ message: 'Error al guardar la firma de entrega' });
+  }
+});
+
+// Ruta para exportar una bitácora a Excel
+app.post('/api/bitacora/:id/export-excel', async (req, res) => {
+    try {
+        console.log('=== POST /api/bitacora/:id/export-excel ===');
+        console.log('ID recibido:', req.params.id);
+
+        // Validar que el ID sea un ObjectId válido
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({ error: 'ID inválido' });
+        }
+
+        // Buscar la bitácora
+        const bitacora = await Bitacora.findById(req.params.id);
+        if (!bitacora) {
+            return res.status(404).json({ error: 'Bitácora no encontrada' });
+        }
+
+        // Exportar a Excel
+        const excelPath = await exportBitacoraToExcel(bitacora);
+        
+        // Enviar el archivo como respuesta
+        res.download(excelPath, `BITACORA-${bitacora.folio}.xlsx`, (err) => {
+            if (err) {
+                console.error('Error al enviar el archivo:', err);
+                res.status(500).json({ error: 'Error al enviar el archivo' });
+            }
+            // Eliminar el archivo después de enviarlo
+            fs.unlink(excelPath, (unlinkErr) => {
+                if (unlinkErr) {
+                    console.error('Error al eliminar el archivo temporal:', unlinkErr);
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error al exportar a Excel:', error);
+        res.status(500).json({ error: 'Error al exportar a Excel' });
     }
 });
 
