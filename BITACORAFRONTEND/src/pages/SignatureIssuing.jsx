@@ -17,16 +17,16 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignatureIssuing = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
     const location = useLocation();
     const [signatureImage, setSignatureImage] = useState(null);
     const [bitacoraId, setBitacoraId] = useState(null);
     const [error, setError] = useState(null);
     const [originalState, setOriginalState] = useState(null);
     const [initialFormValues, setInitialFormValues] = useState({
-        grado: '',
-        nombre: '',
-        matricula: '',
+            grado: '',
+            nombre: '',
+            matricula: '',
     });
 
     useEffect(() => {
@@ -171,50 +171,50 @@ const SignatureIssuing = () => {
                     >
                         {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
                             <View style={styles.formContainer}>
-                                <View style={styles.inputGroup}>
-                                    <Text style={styles.label}>Grado*</Text>
-                                    <TextInput
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Grado*</Text>
+                <TextInput
                                         style={[styles.input, errors.grado && touched.grado && styles.inputError]}
-                                        onChangeText={handleChange('grado')}
-                                        onBlur={handleBlur('grado')}
-                                        value={values.grado}
-                                    />
+                  onChangeText={handleChange('grado')}
+                  onBlur={handleBlur('grado')}
+                  value={values.grado}
+                />
                                     {errors.grado && touched.grado && (
                                         <Text style={styles.errorText}>{errors.grado}</Text>
                                     )}
-                                </View>
+              </View>
 
-                                <View style={styles.inputGroup}>
-                                    <Text style={styles.label}>Nombre*</Text>
-                                    <TextInput
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Nombre*</Text>
+                <TextInput
                                         style={[styles.input, errors.nombre && touched.nombre && styles.inputError]}
-                                        onChangeText={handleChange('nombre')}
-                                        onBlur={handleBlur('nombre')}
-                                        value={values.nombre}
-                                    />
+                  onChangeText={handleChange('nombre')}
+                  onBlur={handleBlur('nombre')}
+                  value={values.nombre}
+                />
                                     {errors.nombre && touched.nombre && (
                                         <Text style={styles.errorText}>{errors.nombre}</Text>
                                     )}
-                                </View>
+              </View>
 
-                                <View style={styles.inputGroup}>
+              <View style={styles.inputGroup}>
                                     <Text style={styles.label}>Matrícula*</Text>
-                                    <TextInput
+                <TextInput
                                         style={[
                                             styles.input,
                                             errors.matricula && touched.matricula && styles.inputError,
                                         ]}
-                                        onChangeText={handleChange('matricula')}
-                                        onBlur={handleBlur('matricula')}
-                                        value={values.matricula}
-                                    />
+                  onChangeText={handleChange('matricula')}
+                  onBlur={handleBlur('matricula')}
+                  value={values.matricula}
+                />
                                     {errors.matricula && touched.matricula && (
                                         <Text style={styles.errorText}>{errors.matricula}</Text>
                                     )}
-                                </View>
+              </View>
 
                                 <View style={styles.signatureSection}>
-                                    <Text style={styles.label}>Firma*</Text>
+                <Text style={styles.label}>Firma*</Text>
                                     {signatureImage ? (
                                         <View style={styles.signaturePreview}>
                                             <Image
@@ -225,8 +225,8 @@ const SignatureIssuing = () => {
                                             <LargeButton
                                                 title="Cambiar Firma"
                                                 onPress={() => handleNavigateToSignaturePad(values)}
-                                            />
-                                        </View>
+                />
+              </View>
                                     ) : (
                                         <LargeButton
                                             title="Capturar Firma"
@@ -235,48 +235,48 @@ const SignatureIssuing = () => {
                                     )}
                                 </View>
 
-                                <View style={styles.buttonContainer}>
+              <View style={styles.buttonContainer}>
                                     <LargeButton
                                         title="Guardar y Continuar"
                                         onPress={handleSubmit}
                                         disabled={!signatureImage}
                                     />
-                                </View>
-                            </View>
-                        )}
-                    </Formik>
+              </View>
+            </View>
+          )}
+        </Formik>
                 </View>
-            }
-        />
-    );
+      }
+    />
+  );
 };
 
 const styles = StyleSheet.create({
-    body: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '80%',
-    },
+  body: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+  },
     formContainer: {
         width: '100%',
     },
-    inputGroup: {
-        marginBottom: 15,
-        width: '100%',
-    },
-    label: {
-        textAlign: 'left',
-        marginBottom: 5,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        borderRadius: 4,
-        paddingLeft: 8,
-        width: '100%',
-    },
+  inputGroup: {
+    marginBottom: 15,
+    width: '100%',
+  },
+  label: {
+    textAlign: 'left',
+    marginBottom: 5,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingLeft: 8,
+    width: '100%',
+  },
     inputError: {
         borderColor: 'red',
     },
@@ -298,12 +298,12 @@ const styles = StyleSheet.create({
         height: 200,
         marginBottom: 10,
         borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 4,
-    },
-    buttonContainer: {
-        width: '100%',
-        marginTop: 20,
+    borderColor: 'gray',
+    borderRadius: 4,
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 20,
     },
 });
 

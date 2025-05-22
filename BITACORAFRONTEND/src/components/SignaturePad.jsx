@@ -1,70 +1,117 @@
-import React, { useRef } from 'react';
-import { View, StyleSheet, Dimensions, Platform, TouchableOpacity, Text } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, StyleSheet, Platform } from 'react-native';
 import SignatureCanvas from 'react-native-signature-canvas';
 import WebSignaturePad from './WebSignaturePad';
+import LargeButton from './LargeButton';
 
-const SignaturePad = ({ onSave, onClear }) => {
+const SignaturePad = ({ onSave, isWeb }) => {
   const signatureRef = useRef(null);
 
-  const handleSignature = (signature) => {
+  const handleSave = (signature) => {
+    console.log('=== SignaturePad - handleSave ===');
+    console.log('Firma guardada:', signature ? 'Presente' : 'No presente');
     onSave(signature);
   };
 
   const handleClear = () => {
-    if (Platform.OS === 'web') {
-      onClear();
-    } else {
-      signatureRef.current?.clearSignature();
-      onClear();
+    console.log('=== SignaturePad - handleClear ===');
+    if (signatureRef.current) {
+      signatureRef.current.clearSignature();
     }
   };
 
-  const handleEmpty = () => {
-    console.log('Empty');
-  };
-
-  const style = `
-    .m-signature-pad--body {
-      border: 1px solid #e8e8e8;
-      background-color: #fff;
-    }
-    .m-signature-pad {
-      box-shadow: none;
-      border: none;
-    }
-  `;
-
-  // Si estamos en web, usar el componente WebSignaturePad
-  if (Platform.OS === 'web') {
-    return <WebSignaturePad onSave={handleSignature} onClear={handleClear} />;
+  if (isWeb) {
+    return <WebSignaturePad onSave={handleSave} />;
   }
 
-  // Para móvil, usar el componente original con botones personalizados
   return (
     <View style={styles.container}>
-      <SignatureCanvas
-        ref={signatureRef}
-        onOK={handleSignature}
-        onEmpty={handleEmpty}
-        onClear={handleClear}
-        descriptionText="Firma"
-        webStyle={style}
-        autoClear={true}
-        imageType="image/png"
-        clearText=""
-        confirmText=""
-      />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleClear}>
-          <Text style={styles.buttonText}>Limpiar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.button} 
-          onPress={() => signatureRef.current?.readSignature()}
-        >
-          <Text style={styles.buttonText}>Guardar</Text>
-        </TouchableOpacity>
+      <View style={styles.signatureContainer}>
+        <SignatureCanvas
+          ref={signatureRef}
+          onOK={handleSave}
+          onEmpty={() => handleSave(null)}
+          descriptionText="Firma"
+          clearText="Limpiar"
+          confirmText="Guardar"
+          webStyle={`
+            .m-signature-pad--body {
+              border: 1px solid #e8e8e8;
+              border-radius: 4px;
+            }
+            .m-signature-pad--footer {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              padding: 10px;
+            }
+            .button {
+              padding: 10px 20px;
+              border-radius: 4px;
+              background-color: #007AFF;
+              color: white;
+              border: none;
+              cursor: pointer;
+            }
+            .button.clear {
+              background-color: #FF3B30;
+            }
+          `}
+          androidStyle={`
+            .m-signature-pad--body {
+              border: 1px solid #e8e8e8;
+              border-radius: 4px;
+            }
+            .m-signature-pad--footer {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              padding: 10px;
+            }
+            .button {
+              padding: 10px 20px;
+              border-radius: 4px;
+              background-color: #007AFF;
+              color: white;
+              border: none;
+            }
+            .button.clear {
+              background-color: #FF3B30;
+            }
+          `}
+          iosStyle={`
+            .m-signature-pad--body {
+              border: 1px solid #e8e8e8;
+              border-radius: 4px;
+            }
+            .m-signature-pad--footer {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              padding: 10px;
+            }
+            .button {
+              padding: 10px 20px;
+              border-radius: 4px;
+              background-color: #007AFF;
+              color: white;
+              border: none;
+            }
+            .button.clear {
+              background-color: #FF3B30;
+            }
+          `}
+        />
       </View>
+      {Platform.OS === 'ios' && (
+        <View style={styles.buttonContainer}>
+          <LargeButton
+            title="Limpiar"
+            onPress={handleClear}
+            style={styles.clearButton}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -72,28 +119,37 @@ const SignaturePad = ({ onSave, onClear }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: Dimensions.get('window').width * 0.9,
+    width: '100%',
+  },
+  signatureContainer: {
+    flex: 1,
+    width: '100%',
     height: 300,
     backgroundColor: '#fff',
-    borderRadius: 8,
-    overflow: 'hidden',
+    borderRadius: 4,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+      },
+      android: {
+        elevation: 5,
+      },
+    }),
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-    marginTop: 10,
+    justifyContent: 'space-between',
+    marginTop: 20,
+    paddingHorizontal: 20,
   },
-  button: {
-    padding: 8,
-    backgroundColor: '#414BB2',
-    borderRadius: 4,
-    minWidth: 100,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
+  clearButton: {
+    backgroundColor: '#FF3B30',
   },
 });
 

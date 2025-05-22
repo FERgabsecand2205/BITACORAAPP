@@ -35,10 +35,10 @@ app.post('/api/bitacora', async (req, res) => {
         console.log('=== POST /api/bitacora ===');
         console.log('Datos recibidos:', req.body);
         
-        const data = req.body;
-        
-        // Validar solo los campos de la primera página
-        if (!data.tipoAeronave || !data.matricula || !data.organismo || !data.folio) {
+    const data = req.body;
+    
+    // Validar solo los campos de la primera página
+    if (!data.tipoAeronave || !data.matricula || !data.organismo || !data.folio) {
             console.log('Error: Faltan campos requeridos');
             return res.status(400).json({ 
                 error: 'Todos los campos de la primera página son requeridos',
@@ -373,7 +373,7 @@ app.post('/api/bitacora/signature-issuing', async (req, res) => {
       details: error.message,
       stack: error.stack
     });
-  }
+    }
 });
 
 app.listen(PORT, () => {

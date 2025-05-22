@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-native';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import SignaturePad from '../components/SignaturePad';
 import LargeButton from '../components/LargeButton';
 
@@ -8,10 +8,12 @@ const SignaturePadPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [signature, setSignature] = useState(null);
+    const [isWeb] = useState(Platform.OS === 'web');
 
     useEffect(() => {
         console.log('=== SignaturePadPage - useEffect ===');
         console.log('Estado de navegación:', location.state);
+        console.log('Plataforma:', Platform.OS);
     }, [location.state]);
 
     const handleSaveSignature = (signatureData) => {
@@ -49,7 +51,10 @@ const SignaturePadPage = () => {
             <Text style={styles.title}>Captura de Firma</Text>
             
             <View style={styles.card}>
-                <SignaturePad onSave={handleSaveSignature} />
+                <SignaturePad 
+                    onSave={handleSaveSignature}
+                    isWeb={isWeb}
+                />
             </View>
 
             <View style={styles.buttonContainer}>
@@ -80,17 +85,27 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 15,
         marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        ...Platform.select({
+            ios: {
+                shadowColor: '#000',
+                shadowOffset: {
+                    width: 0,
+                    height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+            },
+            android: {
+                elevation: 5,
+            },
+            web: {
+                boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.25)',
+            },
+        }),
     },
     buttonContainer: {
         alignItems: 'center',
+        marginTop: 20,
     },
 });
 

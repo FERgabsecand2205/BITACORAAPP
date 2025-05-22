@@ -3,7 +3,7 @@
     "signatureIssuing": null,
     "signatureDoer": null,
     "signatureDelivery": null,
-    "_id": "6828337468562c8a6179486d",
+    "_id": "682e6ec6452b5a4ed33110b9",
     "tipoAeronave": "Prueba",
     "matricula": "TEST-001",
     "organismo": "Test",
@@ -14,7 +14,7 @@
     "eventosTorque": "",
     "cargaAceiteMotores": "",
     "cargaAceiteAPU": "",
-    "fecha": "2025-05-17T06:57:56.832Z",
+    "fecha": "2025-05-22T00:24:38.476Z",
     "categoria": "",
     "observaciones": "",
     "correcciones": [],
@@ -28,35 +28,35 @@
     "signatureIssuing": null,
     "signatureDoer": null,
     "signatureDelivery": null,
-    "_id": "682833b227d69d205a5ec970",
+    "_id": "682e6eec2d9828460332a216",
     "tipoAeronave": "a",
     "matricula": "1",
     "organismo": "a",
     "folio": "1",
     "lugarSalida": "a",
-    "lugarLlegada": "q",
+    "lugarLlegada": "b",
     "tipoVuelo": "a",
     "eventosTorque": "1",
     "cargaAceiteMotores": "1",
     "cargaAceiteAPU": "1",
-    "fecha": "2025-05-17T00:00:00.000Z",
+    "fecha": "2025-05-22T00:00:00.000Z",
     "categoria": "A",
     "observaciones": "",
     "correcciones": [
       {
-        "fecha": "2025-05-17T00:00:00.000Z",
-        "_id": "682833c127d69d205a5ec975"
+        "fecha": "2025-05-22T00:00:00.000Z",
+        "_id": "682e6f192d9828460332a21b"
       }
     ],
     "componentes": [
       {
-        "_id": "682833c627d69d205a5ec97a"
+        "_id": "682e6f1e2d9828460332a220"
       },
       {
-        "_id": "682833c627d69d205a5ec97b"
+        "_id": "682e6f1e2d9828460332a221"
       },
       {
-        "_id": "682833c627d69d205a5ec97c"
+        "_id": "682e6f1e2d9828460332a222"
       }
     ],
     "ordenTrabajo": "1",
@@ -65,278 +65,47 @@
     "solicitudComponente": "1"
   },
   {
-    "signatureIssuing": null,
+    "signatureIssuing": {
+      "firma": {
+        "data": "data:image/png;base64,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",
+        "type": "image/png"
+      },
+      "grado": "a",
+      "nombre": "nombre",
+      "matricula": "1234",
+      "fecha": "2025-05-22T00:32:28.048Z"
+    },
     "signatureDoer": null,
     "signatureDelivery": null,
-    "_id": "6828347d27d69d205a5ec997",
-    "tipoAeronave": "a",
+    "_id": "682e706c2d9828460332a23d",
+    "tipoAeronave": "q",
     "matricula": "1",
     "organismo": "a",
     "folio": "2",
-    "lugarSalida": "q",
-    "lugarLlegada": "a",
+    "lugarSalida": "s",
+    "lugarLlegada": "w",
     "tipoVuelo": "1",
     "eventosTorque": "1",
     "cargaAceiteMotores": "1",
     "cargaAceiteAPU": "1",
-    "fecha": "2025-05-17T00:00:00.000Z",
+    "fecha": "2025-05-22T00:00:00.000Z",
     "categoria": "A",
     "observaciones": "",
     "correcciones": [
       {
-        "fecha": "2025-05-17T00:00:00.000Z",
-        "_id": "6828348c27d69d205a5ec9a4"
+        "fecha": "2025-05-22T00:00:00.000Z",
+        "_id": "682e707b2d9828460332a24a"
       }
     ],
     "componentes": [
       {
-        "_id": "6828349127d69d205a5ec9ad"
+        "_id": "682e70812d9828460332a253"
       },
       {
-        "_id": "6828349127d69d205a5ec9ae"
+        "_id": "682e70812d9828460332a254"
       },
       {
-        "_id": "6828349127d69d205a5ec9af"
-      }
-    ],
-    "ordenTrabajo": "1",
-    "ordenSuministro": "1",
-    "ordenConcentracion": "11",
-    "solicitudComponente": "1"
-  },
-  {
-    "signatureIssuing": null,
-    "signatureDoer": null,
-    "signatureDelivery": null,
-    "_id": "682836ec1be127fff5c27270",
-    "tipoAeronave": "a",
-    "matricula": "a",
-    "organismo": "a",
-    "folio": "11",
-    "lugarSalida": "q",
-    "lugarLlegada": "a",
-    "tipoVuelo": "a1",
-    "eventosTorque": "1",
-    "cargaAceiteMotores": "1",
-    "cargaAceiteAPU": "1",
-    "fecha": "2025-05-17T00:00:00.000Z",
-    "categoria": "A",
-    "observaciones": "",
-    "correcciones": [
-      {
-        "fecha": "2025-05-17T00:00:00.000Z",
-        "_id": "682836f91be127fff5c27285"
-      }
-    ],
-    "componentes": [
-      {
-        "_id": "682837001be127fff5c27292"
-      },
-      {
-        "_id": "682837001be127fff5c27293"
-      },
-      {
-        "_id": "682837001be127fff5c27294"
-      }
-    ],
-    "ordenTrabajo": "1",
-    "ordenSuministro": "1",
-    "ordenConcentracion": "1",
-    "solicitudComponente": "1"
-  },
-  {
-    "signatureIssuing": null,
-    "signatureDoer": null,
-    "signatureDelivery": null,
-    "_id": "68283b191be127fff5c272c7",
-    "tipoAeronave": "a",
-    "matricula": "1",
-    "organismo": "a",
-    "folio": "12",
-    "lugarSalida": "a",
-    "lugarLlegada": "q",
-    "tipoVuelo": "q",
-    "eventosTorque": "1",
-    "cargaAceiteMotores": "1",
-    "cargaAceiteAPU": "1",
-    "fecha": "2025-05-17T00:00:00.000Z",
-    "categoria": "A",
-    "observaciones": "",
-    "correcciones": [
-      {
-        "fecha": "2025-05-17T00:00:00.000Z",
-        "_id": "68283b241be127fff5c272e4"
-      }
-    ],
-    "componentes": [
-      {
-        "_id": "68283b291be127fff5c2730e"
-      },
-      {
-        "_id": "68283b291be127fff5c2730f"
-      },
-      {
-        "_id": "68283b291be127fff5c27310"
-      }
-    ],
-    "ordenTrabajo": "1",
-    "ordenSuministro": "1",
-    "ordenConcentracion": "1",
-    "solicitudComponente": "1"
-  },
-  {
-    "signatureIssuing": null,
-    "signatureDoer": null,
-    "signatureDelivery": null,
-    "_id": "68283cd51be127fff5c2734f",
-    "tipoAeronave": "q",
-    "matricula": "1",
-    "organismo": "q",
-    "folio": "123",
-    "lugarSalida": "q",
-    "lugarLlegada": "q",
-    "tipoVuelo": "q",
-    "eventosTorque": "1",
-    "cargaAceiteMotores": "1",
-    "cargaAceiteAPU": "1",
-    "fecha": "2025-05-17T00:00:00.000Z",
-    "categoria": "A",
-    "observaciones": "",
-    "correcciones": [
-      {
-        "fecha": "2025-05-17T00:00:00.000Z",
-        "_id": "68283ce21be127fff5c27374"
-      }
-    ],
-    "componentes": [
-      {
-        "_id": "68283ce61be127fff5c27389"
-      },
-      {
-        "_id": "68283ce61be127fff5c2738a"
-      },
-      {
-        "_id": "68283ce61be127fff5c2738b"
-      }
-    ],
-    "ordenTrabajo": "1",
-    "ordenSuministro": "1",
-    "ordenConcentracion": "1",
-    "solicitudComponente": "1"
-  },
-  {
-    "signatureIssuing": null,
-    "signatureDoer": null,
-    "signatureDelivery": null,
-    "_id": "68283d8e1be127fff5c273d6",
-    "tipoAeronave": "q",
-    "matricula": "1",
-    "organismo": "q",
-    "folio": "1234",
-    "lugarSalida": "q",
-    "lugarLlegada": "q",
-    "tipoVuelo": "q",
-    "eventosTorque": "1",
-    "cargaAceiteMotores": "1",
-    "cargaAceiteAPU": "1",
-    "fecha": "2025-05-17T00:00:00.000Z",
-    "categoria": "B",
-    "observaciones": "",
-    "correcciones": [
-      {
-        "fecha": "2025-05-17T00:00:00.000Z",
-        "_id": "68283d9a1be127fff5c27403"
-      }
-    ],
-    "componentes": [
-      {
-        "_id": "68283d9f1be127fff5c2741c"
-      },
-      {
-        "_id": "68283d9f1be127fff5c2741d"
-      },
-      {
-        "_id": "68283d9f1be127fff5c2741e"
-      }
-    ],
-    "ordenTrabajo": "1",
-    "ordenSuministro": "1",
-    "ordenConcentracion": "1",
-    "solicitudComponente": "1"
-  },
-  {
-    "signatureIssuing": null,
-    "signatureDoer": null,
-    "signatureDelivery": null,
-    "_id": "68283f151be127fff5c27475",
-    "tipoAeronave": "a",
-    "matricula": "1",
-    "organismo": "a",
-    "folio": "12345",
-    "lugarSalida": "q",
-    "lugarLlegada": "q",
-    "tipoVuelo": "q",
-    "eventosTorque": "1",
-    "cargaAceiteMotores": "1",
-    "cargaAceiteAPU": "1",
-    "fecha": "2025-05-17T00:00:00.000Z",
-    "categoria": "A",
-    "observaciones": "",
-    "correcciones": [
-      {
-        "fecha": "2025-05-17T00:00:00.000Z",
-        "_id": "68283f231be127fff5c274aa"
-      }
-    ],
-    "componentes": [
-      {
-        "_id": "68283f281be127fff5c274c7"
-      },
-      {
-        "_id": "68283f281be127fff5c274c8"
-      },
-      {
-        "_id": "68283f281be127fff5c274c9"
-      }
-    ],
-    "ordenTrabajo": "1",
-    "ordenSuministro": "1",
-    "ordenConcentracion": "1",
-    "solicitudComponente": "1"
-  },
-  {
-    "signatureIssuing": null,
-    "signatureDoer": null,
-    "signatureDelivery": null,
-    "_id": "682841601be127fff5c2752c",
-    "tipoAeronave": "q",
-    "matricula": "1",
-    "organismo": "q",
-    "folio": "321",
-    "lugarSalida": "q",
-    "lugarLlegada": "a",
-    "tipoVuelo": "a",
-    "eventosTorque": "1",
-    "cargaAceiteMotores": "1",
-    "cargaAceiteAPU": "1",
-    "fecha": "2025-05-17T00:00:00.000Z",
-    "categoria": "A",
-    "observaciones": "",
-    "correcciones": [
-      {
-        "fecha": "2025-05-17T00:00:00.000Z",
-        "_id": "6828416c1be127fff5c27569"
-      }
-    ],
-    "componentes": [
-      {
-        "_id": "682841711be127fff5c275b3"
-      },
-      {
-        "_id": "682841711be127fff5c275b4"
-      },
-      {
-        "_id": "682841711be127fff5c275b5"
+        "_id": "682e70812d9828460332a255"
       }
     ],
     "ordenTrabajo": "1",
