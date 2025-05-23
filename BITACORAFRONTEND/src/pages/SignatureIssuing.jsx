@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
@@ -11,247 +11,235 @@ import '../styles/SignatureIssuing.css';
 const API_URL = 'http://localhost:3001/api';
 
 const validationSchema = Yup.object().shape({
-    grado: Yup.string().required('El grado es requerido'),
-    nombre: Yup.string().required('El nombre es requerido'),
-    matricula: Yup.string().required('La matrícula es requerida'),
+  grado: Yup.string().required('El grado es requerido'),
+  nombre: Yup.string().required('El nombre es requerido'),
+  matricula: Yup.string().required('La matrícula es requerida'),
 });
 
 const SignatureIssuing = () => {
   const navigate = useNavigate();
-    const location = useLocation();
-    const [signatureImage, setSignatureImage] = useState(null);
-    const [bitacoraId, setBitacoraId] = useState(null);
-    const [error, setError] = useState(null);
-    const [originalState, setOriginalState] = useState(null);
-    const [initialFormValues, setInitialFormValues] = useState({
-            grado: '',
-            nombre: '',
-            matricula: '',
-    });
+  const location = useLocation();
+  const [signatureImage, setSignatureImage] = useState(null);
+  const [bitacoraId, setBitacoraId] = useState(null);
+  const [error, setError] = useState(null);
+  const [originalState, setOriginalState] = useState(null);
+  const [initialFormValues, setInitialFormValues] = useState({
+    grado: '',
+    nombre: '',
+    matricula: '',
+  });
 
-    useEffect(() => {
-        console.log('=== SignatureIssuing - useEffect ===');
-        console.log('Estado de navegación:', location.state);
-        console.log('Estado original actual:', originalState);
-        
-        if (location.state?.bitacoraId) {
-            console.log('BitacoraId recibido:', location.state.bitacoraId);
-            setBitacoraId(location.state.bitacoraId);
-        }
+  useEffect(() => {
+    console.log('=== SignatureIssuing - useEffect ===');
+    console.log('Estado de navegación:', location.state);
+    console.log('Estado original actual:', originalState);
 
-        if (location.state?.signature) {
-            console.log('Firma recuperada del estado');
-            setSignatureImage(location.state.signature);
-        }
+    if (location.state?.bitacoraId) {
+      console.log('BitacoraId recibido:', location.state.bitacoraId);
+      setBitacoraId(location.state.bitacoraId);
+    }
 
-        // Guardar el estado original si no lo tenemos
-        if (!originalState && location.state) {
-            console.log('Guardando estado original');
-            setOriginalState(location.state);
-            
-            // Inicializar los valores del formulario desde el estado original
-            if (location.state.formData) {
-                console.log('Inicializando valores del formulario desde formData');
-                setInitialFormValues(location.state.formData);
-            } else if (location.state.grado || location.state.nombre || location.state.matricula) {
-                console.log('Inicializando valores del formulario desde el estado original');
-                setInitialFormValues({
-                    grado: location.state.grado || '',
-                    nombre: location.state.nombre || '',
-                    matricula: location.state.matricula || '',
-                });
-            }
-        }
-    }, [location.state, originalState]);
+    if (location.state?.signature) {
+      console.log('Firma recuperada del estado');
+      setSignatureImage(location.state.signature);
+    }
 
-    const handleSignatureComplete = (signature) => {
-        console.log('=== SignatureIssuing - handleSignatureComplete ===');
-        console.log('Firma recibida:', signature ? 'Presente' : 'No presente');
-        
-        if (signature) {
-            console.log('Firma capturada:', signature.substring(0, 50) + '...');
-            setSignatureImage(signature);
-        }
-    };
-
-    const handleNavigateToSignaturePad = (formValues) => {
-        console.log('=== SignatureIssuing - Navegando a SignaturePad ===');
-        console.log('Callback disponible:', location.state?.onSignatureComplete ? 'Sí' : 'No');
-        console.log('Estado original a mantener:', originalState);
-        console.log('Valores del formulario a mantener:', formValues);
-        
-        navigate('/signature-pad', {
-            state: {
-                returnTo: '/signatureIssuing',
-                bitacoraId: bitacoraId,
-                formData: formValues,
-                onSignatureComplete: handleSignatureComplete,
-            },
+    // Guardar el estado original si no lo tenemos
+    if (!originalState && location.state) {
+      console.log('Guardando estado original');
+      setOriginalState(location.state);
+      // Inicializar los valores del formulario desde el estado original
+      if (location.state.formData) {
+        console.log('Inicializando valores del formulario desde formData');
+        setInitialFormValues(location.state.formData);
+      } else if (location.state.grado || location.state.nombre || location.state.matricula) {
+        console.log('Inicializando valores del formulario desde el estado original');
+        setInitialFormValues({
+          grado: location.state.grado || '',
+          nombre: location.state.nombre || '',
+          matricula: location.state.matricula || '',
         });
-    };
+      }
+    }
+  }, [location.state, originalState]);
 
-    const handleSubmit = async (values) => {
-        console.log('=== SignatureIssuing - handleSubmit ===');
-        console.log('Valores del formulario:', values);
-        console.log('Imagen de firma:', signatureImage ? 'Presente' : 'No presente');
-        console.log('BitacoraId a enviar:', bitacoraId);
-        console.log('Estado original a mantener:', originalState);
+  const handleSignatureComplete = signature => {
+    console.log('=== SignatureIssuing - handleSignatureComplete ===');
+    console.log('Firma recibida:', signature ? 'Presente' : 'No presente');
 
-        if (!bitacoraId) {
-            setError('No se encontró el ID de la bitácora');
-            return;
-        }
+    if (signature) {
+      console.log('Firma capturada:', signature.substring(0, 50) + '...');
+      setSignatureImage(signature);
+    }
+  };
 
-        if (!signatureImage) {
-            setError('La firma es requerida');
-            return;
-        }
+  const handleNavigateToSignaturePad = formValues => {
+    console.log('=== SignatureIssuing - Navegando a SignaturePad ===');
+    console.log('Callback disponible:', location.state?.onSignatureComplete ? 'Sí' : 'No');
+    console.log('Estado original a mantener:', originalState);
+    console.log('Valores del formulario a mantener:', formValues);
 
-        try {
-            const response = await fetch(`${API_URL}/bitacora/signature-issuing`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    ...values,
-                    firma: {
-                        data: signatureImage,
-                        type: 'image/png',
-                    },
-                    bitacoraId: bitacoraId,
-                }),
-            });
+    navigate('/signature-pad', {
+      state: {
+        returnTo: '/signatureIssuing',
+        bitacoraId: bitacoraId,
+        formData: formValues,
+        onSignatureComplete: handleSignatureComplete,
+      },
+    });
+  };
 
-            console.log('Respuesta del servidor - Status:', response.status);
-            const data = await response.json();
-            console.log('Respuesta del servidor - Data:', data);
+  const handleSubmit = async values => {
+    console.log('=== SignatureIssuing - handleSubmit ===');
+    console.log('Valores del formulario:', values);
+    console.log('Imagen de firma:', signatureImage ? 'Presente' : 'No presente');
+    console.log('BitacoraId a enviar:', bitacoraId);
+    console.log('Estado original a mantener:', originalState);
 
-            if (!response.ok) {
-                throw new Error(data.message || 'Error al guardar la firma');
-            }
+    if (!bitacoraId) {
+      setError('No se encontró el ID de la bitácora');
+      return;
+    }
 
-            console.log('=== SignatureIssuing - Navegando a SignatureDoer ===');
-            console.log('Estado a enviar:', {
-                bitacoraId: bitacoraId,
-                formData: values,
-                signature: signatureImage,
-            });
+    if (!signatureImage) {
+      Alert.alert('Error', 'Por favor, capture su firma antes de continuar.');
+      return;
+    }
 
-            // Logs adicionales para depuración
-            console.log('=== SignatureIssuing - Debug Info ===');
-            console.log('URL de navegación:', '/signatureDoer');
-            console.log('Estado actual del componente:', {
-                bitacoraId,
-                signatureImage: signatureImage ? 'Presente' : 'No presente',
-                formValues: values,
-                error,
-            });
+    try {
+      // Asegurarse de que la imagen de la firma esté en el formato correcto
+      let base64Image = signatureImage;
+      if (signatureImage.startsWith('data:image')) {
+        base64Image = signatureImage.split(',')[1];
+      }
 
-            // Navegar a SignatureDoer con los datos necesarios
-            navigate('/signatureDoer', {
-                state: {
-                    bitacoraId: bitacoraId,
-                },
-            });
-        } catch (error) {
-            console.error('Error al guardar los datos:', error);
-            setError(error.message);
-        }
-    };
+      const response = await fetch(`${API_URL}/bitacora/signature-issuing`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          grado: values.grado,
+          nombre: values.nombre,
+          matricula: values.matricula,
+          firma: {
+            data: base64Image,
+            type: 'image/png',
+          },
+          bitacoraId: bitacoraId,
+        }),
+      });
 
-    return (
-        <LayoutScrollViewPage
-            header={<HeaderTitle titleName="Datos de quien emite la bitácora" />}
-            body={
-                <View style={styles.body}>
-                    {error && (
-                        <Text style={styles.errorText}>{error}</Text>
-                    )}
-                    
-                    <Formik
-                        initialValues={initialFormValues}
-                        validationSchema={validationSchema}
-                        onSubmit={handleSubmit}
-                        enableReinitialize
-                    >
-                        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
-                            <View style={styles.formContainer}>
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Grado*</Text>
-                <TextInput
-                                        style={[styles.input, errors.grado && touched.grado && styles.inputError]}
-                  onChangeText={handleChange('grado')}
-                  onBlur={handleBlur('grado')}
-                  value={values.grado}
-                />
-                                    {errors.grado && touched.grado && (
-                                        <Text style={styles.errorText}>{errors.grado}</Text>
-                                    )}
-              </View>
+      console.log('Respuesta del servidor - Status:', response.status);
+      const data = await response.json();
+      console.log('Respuesta del servidor - Data:', data);
 
-              <View style={styles.inputGroup}>
-                <Text style={styles.label}>Nombre*</Text>
-                <TextInput
-                                        style={[styles.input, errors.nombre && touched.nombre && styles.inputError]}
-                  onChangeText={handleChange('nombre')}
-                  onBlur={handleBlur('nombre')}
-                  value={values.nombre}
-                />
-                                    {errors.nombre && touched.nombre && (
-                                        <Text style={styles.errorText}>{errors.nombre}</Text>
-                                    )}
-              </View>
+      if (!response.ok) {
+        throw new Error(data.message || 'Error al guardar la firma');
+      }
 
-              <View style={styles.inputGroup}>
-                                    <Text style={styles.label}>Matrícula*</Text>
-                <TextInput
-                                        style={[
-                                            styles.input,
-                                            errors.matricula && touched.matricula && styles.inputError,
-                                        ]}
-                  onChangeText={handleChange('matricula')}
-                  onBlur={handleBlur('matricula')}
-                  value={values.matricula}
-                />
-                                    {errors.matricula && touched.matricula && (
-                                        <Text style={styles.errorText}>{errors.matricula}</Text>
-                                    )}
-              </View>
+      // Navegar a SignatureDoer con los datos necesarios
+      navigate('/signatureDoer', {
+        state: {
+          bitacoraId: bitacoraId,
+        },
+      });
+    } catch (error) {
+      console.error('Error al guardar los datos:', error);
+      setError(error.message);
+    }
+  };
 
-                                <View style={styles.signatureSection}>
-                <Text style={styles.label}>Firma*</Text>
-                                    {signatureImage ? (
-                                        <View style={styles.signaturePreview}>
-                                            <Image
-                                                source={{ uri: signatureImage }}
-                                                style={styles.signatureImage}
-                                                resizeMode="contain"
-                                            />
-                                            <LargeButton
-                                                title="Cambiar Firma"
-                                                onPress={() => handleNavigateToSignaturePad(values)}
-                />
-              </View>
-                                    ) : (
-                                        <LargeButton
-                                            title="Capturar Firma"
-                                            onPress={() => handleNavigateToSignaturePad(values)}
-                                        />
-                                    )}
-                                </View>
+  return (
+    <LayoutScrollViewPage
+      header={<HeaderTitle titleName="Datos de quien emite la bitácora" />}
+      body={
+        <View style={styles.body}>
+          {error && <Text style={styles.errorText}>{error}</Text>}
 
-              <View style={styles.buttonContainer}>
-                                    <LargeButton
-                                        title="Guardar y Continuar"
-                                        onPress={handleSubmit}
-                                        disabled={!signatureImage}
-                                    />
-              </View>
-            </View>
-          )}
-        </Formik>
+          <Formik
+            initialValues={initialFormValues}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+            enableReinitialize
+          >
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+              <View style={styles.formContainer}>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Grado*</Text>
+                  <TextInput
+                    style={[styles.input, errors.grado && touched.grado && styles.inputError]}
+                    onChangeText={handleChange('grado')}
+                    onBlur={handleBlur('grado')}
+                    value={values.grado}
+                  />
+                  {errors.grado && touched.grado && (
+                    <Text style={styles.errorText}>{errors.grado}</Text>
+                  )}
                 </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Nombre*</Text>
+                  <TextInput
+                    style={[styles.input, errors.nombre && touched.nombre && styles.inputError]}
+                    onChangeText={handleChange('nombre')}
+                    onBlur={handleBlur('nombre')}
+                    value={values.nombre}
+                  />
+                  {errors.nombre && touched.nombre && (
+                    <Text style={styles.errorText}>{errors.nombre}</Text>
+                  )}
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.label}>Matrícula*</Text>
+                  <TextInput
+                    style={[
+                      styles.input,
+                      errors.matricula && touched.matricula && styles.inputError,
+                    ]}
+                    onChangeText={handleChange('matricula')}
+                    onBlur={handleBlur('matricula')}
+                    value={values.matricula}
+                  />
+                  {errors.matricula && touched.matricula && (
+                    <Text style={styles.errorText}>{errors.matricula}</Text>
+                  )}
+                </View>
+
+                <View style={styles.signatureSection}>
+                  <Text style={styles.label}>Firma*</Text>
+                  {signatureImage ? (
+                    <View style={styles.signaturePreview}>
+                      <Image
+                        source={{ uri: signatureImage }}
+                        style={styles.signatureImage}
+                        resizeMode="contain"
+                      />
+                      <LargeButton
+                        title="Cambiar Firma"
+                        onPress={() => handleNavigateToSignaturePad(values)}
+                      />
+                    </View>
+                  ) : (
+                    <LargeButton
+                      title="Capturar Firma"
+                      onPress={() => handleNavigateToSignaturePad(values)}
+                    />
+                  )}
+                </View>
+
+                <View style={styles.buttonContainer}>
+                  <LargeButton
+                    title="Guardar y Continuar"
+                    onPress={handleSubmit}
+                    disabled={!signatureImage}
+                  />
+                </View>
+              </View>
+            )}
+          </Formik>
+        </View>
       }
     />
   );
@@ -264,9 +252,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '80%',
   },
-    formContainer: {
-        width: '100%',
-    },
+  formContainer: {
+    width: '100%',
+  },
   inputGroup: {
     marginBottom: 15,
     width: '100%',
@@ -283,34 +271,34 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     width: '100%',
   },
-    inputError: {
-        borderColor: 'red',
-    },
-    errorText: {
-        color: 'red',
-        fontSize: 12,
-        marginTop: 5,
-    },
-    signatureSection: {
-        width: '100%',
-        marginBottom: 20,
-    },
-    signaturePreview: {
-        alignItems: 'center',
-        marginTop: 10,
-    },
-    signatureImage: {
-        width: '100%',
-        height: 200,
-        marginBottom: 10,
-        borderWidth: 1,
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 5,
+  },
+  signatureSection: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  signaturePreview: {
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  signatureImage: {
+    width: '100%',
+    height: 200,
+    marginBottom: 10,
+    borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 4,
   },
   buttonContainer: {
     width: '100%',
     marginTop: 20,
-    },
+  },
 });
 
-export default SignatureIssuing; 
+export default SignatureIssuing;

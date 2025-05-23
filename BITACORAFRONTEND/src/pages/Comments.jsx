@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
@@ -11,7 +11,7 @@ const Comments = () => {
   const location = useLocation();
   const { bitacoraId } = location.state || {};
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       if (!bitacoraId) {
         Alert.alert('Error', 'No se encontró el ID de la bitácora');
@@ -25,7 +25,7 @@ const Comments = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          observaciones: values.comments,
+          observacionesComments: values.comments,
         }),
       });
 
@@ -34,9 +34,12 @@ const Comments = () => {
       }
 
       // 2. Exportar a Excel
-      const excelResponse = await fetch(`http://localhost:3001/api/bitacora/${bitacoraId}/export-excel`, {
-        method: 'POST',
-      });
+      const excelResponse = await fetch(
+        `http://localhost:3001/api/bitacora/${bitacoraId}/export-excel`,
+        {
+          method: 'POST',
+        },
+      );
 
       if (!excelResponse.ok) {
         throw new Error('Error al exportar a Excel');
@@ -62,11 +65,11 @@ const Comments = () => {
   };
 
   return (
-    <LayoutScrollViewPage 
+    <LayoutScrollViewPage
       header={<HeaderTitle titleName="Observaciones y/o comentarios" />}
       body={
         <Formik
-          initialValues={{ 
+          initialValues={{
             comments: '',
           }}
           onSubmit={handleSubmit}
@@ -86,10 +89,7 @@ const Comments = () => {
                 />
               </View>
               <View style={styles.buttonContainer}>
-                <LargeButton 
-                  title="Imprimir"
-                  onPress={handleSubmit}
-                />
+                <LargeButton title="Imprimir" onPress={handleSubmit} />
               </View>
             </View>
           )}
@@ -129,4 +129,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Comments; 
+export default Comments;

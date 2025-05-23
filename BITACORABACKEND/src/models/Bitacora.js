@@ -44,7 +44,7 @@ const bitacoraSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    fecha: {
+    fechaInfoFlight: {
         type: Date,
         default: null
     },
@@ -52,21 +52,43 @@ const bitacoraSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    observaciones: {
+    // Agregado: observaciones por página
+    observacionesInfoFlight: {
         type: String,
         default: ''
     },
     // Campos de InfoFlightPt2 (no requeridos inicialmente)
     correcciones: [{
-        texto: String,
-        fecha: Date,
-        usuario: String
+        fechaCorreccion: Date,
+        codigoATA: String,
+        mmReferencia: String
     }],
-    // Campos de InfoFlightComponents (no requeridos inicialmente)
+    observacionesInfoFlightPt2: {
+        type: String,
+        default: ''
+    },
+    // Campos de componentes (1 a 3 componentes)
     componentes: [{
-        nombre: String,
-        cantidad: Number,
-        unidad: String
+        numeroParte: {
+            type: String,
+            required: true
+        },
+        posicion: {
+            type: String,
+            required: true
+        },
+        numeroSerieOFF: {
+            type: String,
+            required: true
+        },
+        numeroSerieON: {
+            type: String,
+            required: true
+        },
+        nomenclatura: {
+            type: String,
+            required: true
+        }
     }],
     // Campos de InfoFlightOrders (no requeridos inicialmente)
     ordenTrabajo: {
@@ -82,6 +104,10 @@ const bitacoraSchema = new mongoose.Schema({
         default: ''
     },
     solicitudComponente: {
+        type: String,
+        default: ''
+    },
+    categoriaInfoFlightOrders: {
         type: String,
         default: ''
     },
@@ -175,6 +201,10 @@ const bitacoraSchema = new mongoose.Schema({
             type: Date,
             default: null
         }
+    },
+    observacionesComments: {
+        type: String,
+        default: ''
     }
 }, {
     timestamps: true

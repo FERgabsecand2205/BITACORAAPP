@@ -1,18 +1,25 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Yup from 'yup';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import SmallButton from '../components/SmallButton';
 import SegmentedInput from '../components/SegmentedInput';
+import DatePickerField from '../components/DatePickerField';
 import { useNavigate, useLocation } from 'react-router-native';
+
+// Esquema de validación con Yup
+const validationSchema = Yup.object().shape({
+  fechaCorreccion: Yup.string().required('La fecha es requerida'),
+  codigoATA: Yup.string().required('El código A.T.A. es requerido'),
+  mmReferencia: Yup.string().required('La referencia del manual de mantenimiento es requerida'),
+  observaciones: Yup.string(), // Campo opcional
+});
 
 const InfoFlightPt2 = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [date, setDate] = React.useState(new Date());
-  const [show, setShow] = React.useState(false);
 
   // Log al recibir el estado de navegación
   React.useEffect(() => {
@@ -22,13 +29,7 @@ const InfoFlightPt2 = () => {
     console.log('Folio recibido:', location.state?.folio);
   }, [location.state]);
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(false);
-    setDate(currentDate);
-  };
-
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       const folio = location.state?.folio;
       if (!folio) {
@@ -46,7 +47,14 @@ const InfoFlightPt2 = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          correcciones: [values]
+          correcciones: [
+            {
+              fechaCorreccion: values.fechaCorreccion,
+              codigoATA: values.codigoATA,
+              mmReferencia: values.mmReferencia,
+            },
+          ],
+          observacionesInfoFlightPt2: values.observaciones,
         }),
       });
 
@@ -60,22 +68,22 @@ const InfoFlightPt2 = () => {
       const data = await response.json();
       console.log('=== InfoFlightPt2 - Después de actualizar ===');
       console.log('Datos actualizados:', data);
-      
+
       Alert.alert('Éxito', 'Datos de mantenimiento guardados exitosamente');
-      
+
       console.log('=== InfoFlightPt2 - Antes de navegar ===');
       console.log('Estado a enviar:', {
         flightData: location.state?.flightData,
         maintenanceData: values,
-        folio: folio
+        folio: folio,
       });
-      
-      navigate('/InfoFlightComponents', { 
-        state: { 
+
+      navigate('/InfoFlightComponents', {
+        state: {
           flightData: location.state?.flightData,
           maintenanceData: values,
-          folio: folio
-        } 
+          folio: folio,
+        },
       });
     } catch (error) {
       console.error('Error completo:', error);
@@ -84,57 +92,55 @@ const InfoFlightPt2 = () => {
   };
 
   return (
-    <LayoutScrollViewPage 
+    <LayoutScrollViewPage
       header={<HeaderTitle titleName="Correcciones/Servicios" />}
       body={
         <Formik
-          initialValues={{ 
-            fecha: date.toISOString().split('T')[0], 
-            codigoATA: '', 
-            mmReferencia: '', 
-            observaciones: '' 
+          initialValues={{
+            fechaCorreccion: new Date().toISOString().split('T')[0],
+            codigoATA: '',
+            mmReferencia: '',
+            observaciones: '',
           }}
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => (
+          {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, errors, touched }) => (
             <View style={styles.body}>
-              <Text style={styles.subtitle}>
-                Correcciones o Servicios de Mantenimiento
-              </Text>
+              <Text style={styles.subtitle}>Correcciones o Servicios de Mantenimiento</Text>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Fecha</Text>
-                <TextInput
-                  style={styles.input}
-                  value={values.fecha}
-                  onFocus={() => setShow(true)}
+                <DatePickerField
+                  value={values.fechaCorreccion}
+                  onChange={date => setFieldValue('fechaCorreccion', date)}
                 />
-                {show && (
-                  <DateTimePicker
-                    value={date}
-                    mode="date"
-                    display="default"
-                    onChange={(event, selectedDate) => {
-                      onChange(event, selectedDate);
-                      if (selectedDate) {
-                        setFieldValue('fecha', selectedDate.toISOString().split('T')[0]);
-                      }
-                    }}
-                  />
+                {touched.fechaCorreccion && errors.fechaCorreccion && (
+                  <Text style={styles.errorText}>{errors.fechaCorreccion}</Text>
                 )}
               </View>
               <SegmentedInput
                 label="Código A.T.A. (Air Transport Association)"
                 value={values.codigoATA}
-                onChangeText={(text) => setFieldValue('codigoATA', text)}
+                onChangeText={text => setFieldValue('codigoATA', text)}
+                error={touched.codigoATA && errors.codigoATA}
               />
+              {touched.codigoATA && errors.codigoATA && (
+                <Text style={styles.errorText}>{errors.codigoATA}</Text>
+              )}
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>MM (Referencia Manual de Mantenimiento)</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    touched.mmReferencia && errors.mmReferencia && styles.inputError,
+                  ]}
                   onChangeText={handleChange('mmReferencia')}
                   onBlur={handleBlur('mmReferencia')}
                   value={values.mmReferencia}
                 />
+                {touched.mmReferencia && errors.mmReferencia && (
+                  <Text style={styles.errorText}>{errors.mmReferencia}</Text>
+                )}
               </View>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Observaciones</Text>
@@ -146,15 +152,12 @@ const InfoFlightPt2 = () => {
                 />
               </View>
               <View style={styles.buttonContainer}>
-                <SmallButton 
+                <SmallButton
                   title="Previo"
                   onPress={() => navigate('/InfoFlight')}
                   style={{ backgroundColor: '#3f51b5' }}
                 />
-                <SmallButton 
-                  title="Continuar"
-                  onPress={handleSubmit}
-                />
+                <SmallButton title="Continuar" onPress={handleSubmit} />
               </View>
             </View>
           )}
@@ -194,12 +197,20 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
     width: '100%',
   },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 2,
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     marginTop: 10,
-  }
+  },
 });
 
 export default InfoFlightPt2;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
@@ -11,10 +11,10 @@ import '../styles/SignatureDoer.css';
 const API_URL = 'http://localhost:3001/api';
 
 const validationSchema = Yup.object().shape({
-    grado: Yup.string().required('El grado es requerido'),
-    nombre: Yup.string().required('El nombre es requerido'),
-    matricula: Yup.string().required('La matrícula es requerida'),
-    mel: Yup.string().required('El MEL es requerido'),
+  grado: Yup.string().required('El grado es requerido'),
+  nombre: Yup.string().required('El nombre es requerido'),
+  matricula: Yup.string().required('La matrícula es requerida'),
+  mel: Yup.string().required('El MEL es requerido'),
 });
 
 const SignatureDoer = () => {
@@ -43,7 +43,6 @@ const SignatureDoer = () => {
       error,
       initialFormValues,
     });
-    
     // Manejar el estado de navegación
     if (location.state) {
       // Si recibimos un bitacoraId, actualizarlo
@@ -70,24 +69,22 @@ const SignatureDoer = () => {
         setOriginalState(location.state);
       }
     }
-  }, [location.state, originalState]);
+  }, [location.state, originalState, bitacoraId, error, initialFormValues, signatureImage]);
 
-  const handleSignatureComplete = (signature) => {
+  const handleSignatureComplete = signature => {
     console.log('=== SignatureDoer - handleSignatureComplete ===');
     console.log('Firma recibida:', signature ? 'Presente' : 'No presente');
-    
     if (signature) {
       console.log('Firma capturada:', signature.substring(0, 50) + '...');
       setSignatureImage(signature);
     }
   };
 
-  const handleNavigateToSignaturePad = (formValues) => {
+  const handleNavigateToSignaturePad = formValues => {
     console.log('=== SignatureDoer - Navegando a SignaturePad ===');
     console.log('Callback disponible:', location.state?.onSignatureComplete ? 'Sí' : 'No');
     console.log('Estado original a mantener:', originalState);
     console.log('Valores del formulario a mantener:', formValues);
-    
     navigate('/signature-pad', {
       state: {
         returnTo: '/signatureDoer',
@@ -98,7 +95,7 @@ const SignatureDoer = () => {
     });
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     console.log('=== SignatureDoer - handleSubmit ===');
     console.log('Valores del formulario:', values);
     console.log('Imagen de firma:', signatureImage ? 'Presente' : 'No presente');
@@ -164,10 +161,7 @@ const SignatureDoer = () => {
       header={<HeaderTitle titleName="Datos de quien realizó las acciones" />}
       body={
         <View style={styles.body}>
-          {error && (
-            <Text style={styles.errorText}>{error}</Text>
-          )}
-          
+          {error && <Text style={styles.errorText}>{error}</Text>}
           <Formik
             initialValues={initialFormValues}
             validationSchema={validationSchema}
@@ -205,7 +199,10 @@ const SignatureDoer = () => {
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Matrícula*</Text>
                   <TextInput
-                    style={[styles.input, errors.matricula && touched.matricula && styles.inputError]}
+                    style={[
+                      styles.input,
+                      errors.matricula && touched.matricula && styles.inputError,
+                    ]}
                     onChangeText={handleChange('matricula')}
                     onBlur={handleBlur('matricula')}
                     value={values.matricula}
@@ -223,9 +220,7 @@ const SignatureDoer = () => {
                     onBlur={handleBlur('mel')}
                     value={values.mel}
                   />
-                  {errors.mel && touched.mel && (
-                    <Text style={styles.errorText}>{errors.mel}</Text>
-                  )}
+                  {errors.mel && touched.mel && <Text style={styles.errorText}>{errors.mel}</Text>}
                 </View>
 
                 <View style={styles.signatureSection}>
@@ -321,4 +316,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignatureDoer; 
+export default SignatureDoer;

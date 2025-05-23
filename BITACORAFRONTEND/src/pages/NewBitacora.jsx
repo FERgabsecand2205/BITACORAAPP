@@ -1,15 +1,34 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import { useNavigate } from 'react-router-native'; // Importar useNavigate
 import LayoutPage from '../components/LayoutPage'; // Importar LayoutPage
 import HeaderTitle from '../components/HeaderTitle'; // Importar HeaderTitle
 import LargeButton from '../components/LargeButton'; // Importar LargeButton
 
+const validationSchema = Yup.object().shape({
+  tipoAeronave: Yup.string()
+    .required('El tipo de aeronave es requerido')
+    .min(2, 'El tipo de aeronave debe tener al menos 2 caracteres'),
+  matricula: Yup.string()
+    .required('La matrícula es requerida')
+    .matches(
+      /^[A-Z0-9-]+$/,
+      'La matrícula solo debe contener letras mayúsculas, números y guiones',
+    ),
+  organismo: Yup.string()
+    .required('El organismo es requerido')
+    .min(2, 'El organismo debe tener al menos 2 caracteres'),
+  folio: Yup.string()
+    .required('El folio es requerido')
+    .matches(/^\d{4}-\d{3}$/, 'El folio debe tener el formato YYYY-XXX (ejemplo: 2024-001)'),
+});
+
 const NewBitacora = () => {
   const navigate = useNavigate(); // Inicializar useNavigate
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       console.log('=== NewBitacora - Intentando crear bitácora ===');
       console.log('Datos a enviar:', values);
@@ -73,24 +92,20 @@ const NewBitacora = () => {
             tipoAeronave: '',
             matricula: '',
             organismo: '',
-            folio: ''
+            folio: '',
           }}
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
-          validate={values => {
-            const errors = {};
-            if (!values.tipoAeronave) errors.tipoAeronave = 'El tipo de aeronave es requerido';
-            if (!values.matricula) errors.matricula = 'La matrícula es requerida';
-            if (!values.organismo) errors.organismo = 'El organismo es requerido';
-            if (!values.folio) errors.folio = 'El folio es requerido';
-            return errors;
-          }}
         >
           {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
             <View style={styles.body}>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Tipo de Aeronave</Text>
                 <TextInput
-                  style={[styles.input, touched.tipoAeronave && errors.tipoAeronave && styles.inputError]}
+                  style={[
+                    styles.input,
+                    touched.tipoAeronave && errors.tipoAeronave && styles.inputError,
+                  ]}
                   onChangeText={handleChange('tipoAeronave')}
                   onBlur={handleBlur('tipoAeronave')}
                   value={values.tipoAeronave}
@@ -139,9 +154,9 @@ const NewBitacora = () => {
                   <Text style={styles.errorText}>{errors.folio}</Text>
                 )}
               </View>
-              <LargeButton 
-                title={<Text style={styles.buttonText}>Continuar</Text>} 
-                onPress={handleSubmit} 
+              <LargeButton
+                title={<Text style={styles.buttonText}>Continuar</Text>}
+                onPress={handleSubmit}
               />
             </View>
           )}

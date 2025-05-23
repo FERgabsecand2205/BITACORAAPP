@@ -31,7 +31,6 @@ const SignatureDelivery = () => {
   useEffect(() => {
     console.log('=== SignatureDelivery - useEffect ===');
     console.log('Estado de navegación:', location.state);
-    
     if (location.state) {
       // Si recibimos un bitacoraId, actualizarlo
       if (location.state.bitacoraId) {
@@ -53,21 +52,19 @@ const SignatureDelivery = () => {
     }
   }, [location.state]);
 
-  const handleSignatureComplete = (signature) => {
+  const handleSignatureComplete = signature => {
     console.log('=== SignatureDelivery - handleSignatureComplete ===');
     console.log('Firma recibida:', signature ? 'Presente' : 'No presente');
-    
     if (signature) {
       console.log('Firma capturada:', signature.substring(0, 50) + '...');
       setSignatureImage(signature);
     }
   };
 
-  const handleNavigateToSignaturePad = (formValues) => {
+  const handleNavigateToSignaturePad = formValues => {
     console.log('=== SignatureDelivery - Navegando a SignaturePad ===');
     console.log('Callback disponible:', location.state?.onSignatureComplete ? 'Sí' : 'No');
     console.log('Valores del formulario a mantener:', formValues);
-    
     navigate('/signature-pad', {
       state: {
         returnTo: '/signatureDelivery',
@@ -78,7 +75,7 @@ const SignatureDelivery = () => {
     });
   };
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     console.log('=== SignatureDelivery - handleSubmit ===');
     console.log('Valores del formulario:', values);
     console.log('Imagen de firma:', signatureImage ? 'Presente' : 'No presente');
@@ -136,12 +133,11 @@ const SignatureDelivery = () => {
   };
 
   return (
-    <LayoutScrollViewPage 
+    <LayoutScrollViewPage
       header={<HeaderTitle titleName="Datos de quien entrega aeronave" />}
       body={
         <View style={styles.body}>
           {error && <Text style={styles.errorText}>{error}</Text>}
-          
           <Formik
             initialValues={initialFormValues}
             validationSchema={validationSchema}
@@ -179,7 +175,10 @@ const SignatureDelivery = () => {
                 <View style={styles.inputGroup}>
                   <Text style={styles.label}>Matrícula*</Text>
                   <TextInput
-                    style={[styles.input, errors.matricula && touched.matricula && styles.inputError]}
+                    style={[
+                      styles.input,
+                      errors.matricula && touched.matricula && styles.inputError,
+                    ]}
                     onChangeText={handleChange('matricula')}
                     onBlur={handleBlur('matricula')}
                     value={values.matricula}
@@ -283,4 +282,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignatureDelivery; 
+export default SignatureDelivery;
