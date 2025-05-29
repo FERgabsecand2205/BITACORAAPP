@@ -20,7 +20,7 @@ const BitacoraCorreccion = () => {
     useEffect(() => {
         const fetchBitacora = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/api/bitacoras/${folio}`);
+                const response = await axios.get(`https://bitacoraapp.onrender.com/api/bitacoras/${folio}`);
                 const bitacora = response.data;
                 setFormData({
                     folio: bitacora.folio,
@@ -57,7 +57,7 @@ const BitacoraCorreccion = () => {
         }
 
         try {
-            const response = await axios.patch(`http://localhost:3001/api/bitacora/${folio}/correcciones`, {
+            const response = await axios.patch(`https://bitacoraapp.onrender.com/api/bitacora/${folio}/correcciones`, {
                 correccion: formData.correccion,
                 usuario: 'Usuario' // Esto debería venir de un sistema de autenticación
             });

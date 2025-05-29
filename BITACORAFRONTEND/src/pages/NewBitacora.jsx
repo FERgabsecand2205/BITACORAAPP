@@ -33,7 +33,7 @@ const NewBitacora = () => {
       console.log('=== NewBitacora - Intentando crear bitácora ===');
       console.log('Datos a enviar:', values);
 
-      const response = await fetch('http://localhost:3001/api/bitacora', {
+      const response = await fetch('https://bitacoraapp.onrender.com/api/bitacora', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

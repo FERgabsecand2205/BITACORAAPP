@@ -14,7 +14,7 @@ const BitacoraSearch = () => {
 
     const fetchBitacoras = async () => {
         try {
-            const response = await axios.get('http://localhost:3001/api/bitacoras');
+            const response = await axios.get('https://bitacoraapp.onrender.com/api/bitacoras');
             setBitacoras(response.data);
         } catch (error) {
             console.error('Error fetching bitacoras:', error);
