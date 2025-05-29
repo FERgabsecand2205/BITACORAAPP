@@ -14,7 +14,8 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: 'https://fergabsecand2205.github.io',
+  origin: ['https://fergabsecand2205.github.io', 'http://localhost:19007', 'http://localhost:3000'],
+  credentials: true
 }));
 app.use(bodyParser.json());
 
