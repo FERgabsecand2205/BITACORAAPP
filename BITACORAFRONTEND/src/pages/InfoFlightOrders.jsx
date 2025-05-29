@@ -10,6 +10,25 @@ import { useNavigate, useLocation } from 'react-router-native';
 
 const API_URL = 'https://bitacoraapp.onrender.com/api';
 
+// Esquema de validación con Yup
+const validationSchema = Yup.object().shape({
+  ordenTrabajo: Yup.string()
+    .required('La orden de trabajo es requerida')
+    .min(2, 'La orden de trabajo debe tener al menos 2 caracteres'),
+  ordenSuministro: Yup.string()
+    .required('La orden de suministro es requerida')
+    .min(2, 'La orden de suministro debe tener al menos 2 caracteres'),
+  ordenConcentracion: Yup.string()
+    .required('La orden de concentración es requerida')
+    .min(2, 'La orden de concentración debe tener al menos 2 caracteres'),
+  solicitudComponente: Yup.string()
+    .required('La solicitud de componente es requerida')
+    .min(2, 'La solicitud de componente debe tener al menos 2 caracteres'),
+  categoriaInfoFlightOrders: Yup.string()
+    .required('La categoría es requerida')
+    .min(2, 'La categoría debe tener al menos 2 caracteres'),
+});
+
 const InfoFlightOrders = () => {
   const navigate = useNavigate();
   const location = useLocation();
