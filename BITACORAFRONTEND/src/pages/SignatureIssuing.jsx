@@ -6,14 +6,20 @@ import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
 import { useNavigate, useLocation } from 'react-router-native';
-import '../styles/SignatureIssuing.css';
 
 const API_URL = 'https://bitacoraapp.onrender.com/api';
 
 const validationSchema = Yup.object().shape({
-  grado: Yup.string().required('El grado es requerido'),
-  nombre: Yup.string().required('El nombre es requerido'),
-  matricula: Yup.string().required('La matrícula es requerida'),
+  grado: Yup.string()
+    .required('El grado es requerido')
+    .min(2, 'El grado debe tener al menos 2 caracteres'),
+  nombre: Yup.string()
+    .required('El nombre es requerido')
+    .min(2, 'El nombre debe tener al menos 2 caracteres')
+    .matches(/^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/, 'El nombre solo debe contener letras y espacios'),
+  matricula: Yup.string()
+    .required('La matrícula es requerida')
+    .matches(/^[A-Z0-9-]+$/, 'La matrícula solo debe contener letras mayúsculas, números y guiones'),
 });
 
 const SignatureIssuing = () => {
