@@ -27,42 +27,53 @@ const InfoFlightComponents = () => {
     }
   }, [location.state]);
 
-  const handleCreate = (values) => {
+  const handleCreate = values => {
     if (componentCount < 3) {
       console.log(`=== InfoFlightComponents - Creando componente ${componentCount} ===`);
       console.log('Valores del componente:', values);
-      
+
+      // Validar que no excedamos el límite de 3 componentes
+      if (components.length >= 2) {
+        Alert.alert('Error', 'No se pueden agregar más de 3 componentes');
+        return;
+      }
+
       const updatedComponents = [...components, values];
       console.log('Lista actualizada de componentes:', updatedComponents);
-      
+
       const newState = {
         components: updatedComponents,
         componentCount: componentCount + 1,
         folio: location.state?.folio,
         flightData: location.state?.flightData,
-        maintenanceData: location.state?.maintenanceData
+        maintenanceData: location.state?.maintenanceData,
       };
       console.log('Nuevo estado a enviar:', newState);
-      
+
       navigate('/InfoFlightComponents', {
         state: newState,
-        replace: true
+        replace: true,
       });
     }
   };
 
-  const handleContinue = async (values) => {
+  const handleContinue = async values => {
     try {
       console.log('=== InfoFlightComponents - Continuando con el último componente ===');
       console.log('Valores del último componente:', values);
-      
+
       const allComponents = [...components, values];
       console.log('Todos los componentes guardados:', allComponents);
-      
+
+      // Validar que tengamos al menos un componente
+      if (allComponents.length === 0) {
+        throw new Error('Debe agregar al menos un componente');
+      }
+
       // Obtener el folio del estado
       const folio = location.state?.folio;
       console.log('Folio obtenido del estado:', folio);
-      
+
       if (!folio) {
         console.error('Estado actual:', location.state);
         throw new Error('No se encontró el folio de la bitácora');
@@ -79,14 +90,14 @@ const InfoFlightComponents = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          componentes: allComponents
-        })
+          componentes: allComponents,
+        }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Error del servidor:', errorData);
-        throw new Error('Error al actualizar los componentes');
+        throw new Error(errorData.message || 'Error al actualizar los componentes');
       }
 
       const result = await response.json();
@@ -97,26 +108,27 @@ const InfoFlightComponents = () => {
         componentData: allComponents,
         folio: folio,
         flightData: location.state?.flightData,
-        maintenanceData: location.state?.maintenanceData
+        maintenanceData: location.state?.maintenanceData,
       };
       console.log('Estado a enviar a la siguiente página:', nextState);
-      
+
       navigate('/InfoFlightOrders', { state: nextState });
     } catch (error) {
       console.error('Error en handleContinue:', error);
       Alert.alert(
         'Error',
-        'Hubo un error al guardar los componentes. Por favor, intente nuevamente.'
+        error.message || 'Hubo un error al guardar los componentes. Por favor, intente nuevamente.',
       );
     }
   };
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values, action) => {
     console.log('=== InfoFlightComponents - Enviando formulario ===');
     console.log('Valores del formulario actual:', values);
     console.log('Contador de componentes:', componentCount);
-    
-    if (componentCount < 3) {
+    console.log('Acción seleccionada:', action);
+
+    if (action === 'create') {
       handleCreate(values);
     } else {
       handleContinue(values);
@@ -124,75 +136,104 @@ const InfoFlightComponents = () => {
   };
 
   return (
-    <LayoutScrollViewPage 
+    <LayoutScrollViewPage
       header={<HeaderTitle titleName="Componentes involucrados" />}
       body={
         <Formik
-          initialValues={{ 
+          initialValues={{
             numeroParte: '',
             posicion: '',
             numeroSerieOFF: '',
             numeroSerieON: '',
-            nomenclatura: ''
+            nomenclatura: '',
           }}
-          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
+          onSubmit={(values, { setSubmitting }) => {
+            // Este onSubmit no se usa directamente
+            setSubmitting(false);
+          }}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({ handleChange, handleBlur, values, errors, touched }) => (
             <View style={styles.body}>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>N/P (Numero de partes del componente afectado)</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    touched.numeroParte && errors.numeroParte && styles.inputError,
+                  ]}
                   onChangeText={handleChange('numeroParte')}
                   onBlur={handleBlur('numeroParte')}
                   value={values.numeroParte}
                 />
+                {touched.numeroParte && errors.numeroParte && (
+                  <Text style={styles.errorText}>{errors.numeroParte}</Text>
+                )}
               </View>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>POS (Posición del componente afectado)</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, touched.posicion && errors.posicion && styles.inputError]}
                   onChangeText={handleChange('posicion')}
                   onBlur={handleBlur('posicion')}
                   value={values.posicion}
                 />
+                {touched.posicion && errors.posicion && (
+                  <Text style={styles.errorText}>{errors.posicion}</Text>
+                )}
               </View>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>N/S OFF (Numero de serie del componente afectado)</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    touched.numeroSerieOFF && errors.numeroSerieOFF && styles.inputError,
+                  ]}
                   onChangeText={handleChange('numeroSerieOFF')}
                   onBlur={handleBlur('numeroSerieOFF')}
                   value={values.numeroSerieOFF}
                 />
+                {touched.numeroSerieOFF && errors.numeroSerieOFF && (
+                  <Text style={styles.errorText}>{errors.numeroSerieOFF}</Text>
+                )}
               </View>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>N/S ON (Numero de serie del componente instalado)</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    touched.numeroSerieON && errors.numeroSerieON && styles.inputError,
+                  ]}
                   onChangeText={handleChange('numeroSerieON')}
                   onBlur={handleBlur('numeroSerieON')}
                   value={values.numeroSerieON}
                 />
+                {touched.numeroSerieON && errors.numeroSerieON && (
+                  <Text style={styles.errorText}>{errors.numeroSerieON}</Text>
+                )}
               </View>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Nomenclatura</Text>
                 <TextInput
-                  style={styles.input}
+                  style={[
+                    styles.input,
+                    touched.nomenclatura && errors.nomenclatura && styles.inputError,
+                  ]}
                   onChangeText={handleChange('nomenclatura')}
                   onBlur={handleBlur('nomenclatura')}
                   value={values.nomenclatura}
                 />
+                {touched.nomenclatura && errors.nomenclatura && (
+                  <Text style={styles.errorText}>{errors.nomenclatura}</Text>
+                )}
               </View>
               <View style={styles.noteContainer}>
                 <Text style={styles.noteText}>
-                  En caso de ser mas de un componente, se debe repetir el formulario dando click en el botón{' '}
-                  <Text style={styles.highlightedText}>Crear</Text>
-                  {' '}para crear un nuevo componente
+                  En caso de ser mas de un componente, se debe repetir el formulario dando click en
+                  el botón <Text style={styles.highlightedText}>Crear</Text> para crear un nuevo
+                  componente
                 </Text>
-                <Text style={styles.componentCounter}>
-                  Componente {componentCount} de 3
-                </Text>
+                <Text style={styles.componentCounter}>Componente {componentCount} de 3</Text>
                 {componentCount > 1 && (
                   <Text style={styles.savedComponentsText}>
                     Componentes guardados: {components.length}
@@ -200,18 +241,17 @@ const InfoFlightComponents = () => {
                 )}
               </View>
               <View style={styles.buttonContainer}>
-                <SmallButton 
-                  title="Crear"
-                  onPress={handleSubmit}
-                  style={[
-                    { backgroundColor: '#3f51b5' },
-                    componentCount >= 3 && styles.disabledButton
-                  ]}
-                  disabled={componentCount >= 3}
-                />
-                <SmallButton 
+                {componentCount < 3 && (
+                  <SmallButton
+                    title="Crear"
+                    onPress={() => handleSubmit(values, 'create')}
+                    style={{ backgroundColor: '#3f51b5' }}
+                  />
+                )}
+                <SmallButton
                   title="Continuar"
-                  onPress={handleSubmit}
+                  onPress={() => handleSubmit(values, 'continue')}
+                  style={{ backgroundColor: '#4CAF50' }}
                 />
               </View>
             </View>
@@ -243,6 +283,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingLeft: 8,
     width: '100%',
+  },
+  inputError: {
+    borderColor: 'red',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 2,
   },
   noteContainer: {
     marginVertical: 10,
@@ -276,10 +324,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
   },
-  disabledButton: {
-    backgroundColor: '#9e9e9e',
-    opacity: 0.7,
-  }
 });
 
-export default InfoFlightComponents; 
+export default InfoFlightComponents;

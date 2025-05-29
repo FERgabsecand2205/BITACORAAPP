@@ -8,7 +8,11 @@ import LargeButton from '../components/LargeButton';
 import { useNavigate, useLocation } from 'react-router-native';
 import '../styles/SignatureDoer.css';
 
+<<<<<<< HEAD
 const API_URL = 'https://bitacoraapp.onrender.com/api';
+=======
+const API_URL = 'http://localhost:3001/api';
+>>>>>>> main
 
 const validationSchema = Yup.object().shape({
   grado: Yup.string().required('El grado es requerido'),

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
@@ -23,7 +24,7 @@ const InfoFlightOrders = () => {
     console.log('Datos de mantenimiento:', location.state?.maintenanceData);
   }, [location.state]);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async values => {
     try {
       const folio = location.state?.folio;
       if (!folio) {
@@ -36,15 +37,6 @@ const InfoFlightOrders = () => {
       console.log('Datos a enviar:', values);
       console.log('Estado actual completo:', location.state);
 
-      // Validar que los datos no estén vacíos
-      const requiredFields = ['ordenTrabajo', 'ordenSuministro', 'ordenConcentracion', 'solicitudComponente', 'categoria'];
-      const emptyFields = requiredFields.filter(field => !values[field]);
-      
-      if (emptyFields.length > 0) {
-        console.error('Campos vacíos:', emptyFields);
-        throw new Error(`Los siguientes campos son requeridos: ${emptyFields.join(', ')}`);
-      }
-
       // Actualizar la bitácora con los datos de órdenes
       const response = await fetch(`${API_URL}/bitacora/${folio}`, {
         method: 'PUT',
@@ -56,8 +48,8 @@ const InfoFlightOrders = () => {
           ordenSuministro: values.ordenSuministro,
           ordenConcentracion: values.ordenConcentracion,
           solicitudComponente: values.solicitudComponente,
-          categoria: values.categoria
-        })
+          categoriaInfoFlightOrders: values.categoriaInfoFlightOrders,
+        }),
       });
 
       if (!response.ok) {
@@ -77,7 +69,7 @@ const InfoFlightOrders = () => {
         ordenSuministro: result.bitacora.ordenSuministro,
         ordenConcentracion: result.bitacora.ordenConcentracion,
         solicitudComponente: result.bitacora.solicitudComponente,
-        categoria: result.bitacora.categoria
+        categoria: result.bitacora.categoria,
       };
 
       console.log('Campos actualizados en la base de datos:', updatedFields);
@@ -85,10 +77,17 @@ const InfoFlightOrders = () => {
       // Preparar el estado para la siguiente página
       const nextState = {
         ...location.state,
-        ordersData: values
+        ordersData: values,
+        bitacoraId: result.bitacora._id,
+        formData: {
+          ...location.state?.formData,
+          ordersData: values,
+        },
       };
+
       console.log('=== InfoFlightOrders - Estado final ===');
       console.log('Estado a enviar a la siguiente página:', nextState);
+      console.log('BitacoraId a enviar:', result.bitacora._id);
 
       // Navegar a la página de firma
       navigate('/signatureIssuing', { state: nextState });
@@ -96,40 +95,36 @@ const InfoFlightOrders = () => {
       console.error('Error en handleSubmit:', error);
       Alert.alert(
         'Error',
-        error.message || 'Hubo un error al guardar los datos de órdenes. Por favor, intente nuevamente.'
+        error.message ||
+          'Hubo un error al guardar los datos de órdenes. Por favor, intente nuevamente.',
       );
     }
   };
 
   return (
-    <LayoutScrollViewPage 
+    <LayoutScrollViewPage
       header={<HeaderTitle titleName="Órdenes y Solicitudes" />}
       body={
         <Formik
-          initialValues={{ 
+          initialValues={{
             ordenTrabajo: '',
             ordenSuministro: '',
             ordenConcentracion: '',
             solicitudComponente: '',
-            categoria: ''
+            categoriaInfoFlightOrders: '',
           }}
+          validationSchema={validationSchema}
           onSubmit={handleSubmit}
-          validate={values => {
-            const errors = {};
-            if (!values.ordenTrabajo) errors.ordenTrabajo = 'La orden de trabajo es requerida';
-            if (!values.ordenSuministro) errors.ordenSuministro = 'La orden de suministro es requerida';
-            if (!values.ordenConcentracion) errors.ordenConcentracion = 'La orden de concentración es requerida';
-            if (!values.solicitudComponente) errors.solicitudComponente = 'La solicitud de componente es requerida';
-            if (!values.categoria) errors.categoria = 'La categoría es requerida';
-            return errors;
-          }}
         >
           {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, errors, touched }) => (
             <View style={styles.body}>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Orden de trabajo</Text>
                 <TextInput
-                  style={[styles.input, touched.ordenTrabajo && errors.ordenTrabajo && styles.inputError]}
+                  style={[
+                    styles.input,
+                    touched.ordenTrabajo && errors.ordenTrabajo && styles.inputError,
+                  ]}
                   onChangeText={handleChange('ordenTrabajo')}
                   onBlur={handleBlur('ordenTrabajo')}
                   value={values.ordenTrabajo}
@@ -141,7 +136,10 @@ const InfoFlightOrders = () => {
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Orden de suministro</Text>
                 <TextInput
-                  style={[styles.input, touched.ordenSuministro && errors.ordenSuministro && styles.inputError]}
+                  style={[
+                    styles.input,
+                    touched.ordenSuministro && errors.ordenSuministro && styles.inputError,
+                  ]}
                   onChangeText={handleChange('ordenSuministro')}
                   onBlur={handleBlur('ordenSuministro')}
                   value={values.ordenSuministro}
@@ -153,7 +151,10 @@ const InfoFlightOrders = () => {
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Orden de concentración</Text>
                 <TextInput
-                  style={[styles.input, touched.ordenConcentracion && errors.ordenConcentracion && styles.inputError]}
+                  style={[
+                    styles.input,
+                    touched.ordenConcentracion && errors.ordenConcentracion && styles.inputError,
+                  ]}
                   onChangeText={handleChange('ordenConcentracion')}
                   onBlur={handleBlur('ordenConcentracion')}
                   value={values.ordenConcentracion}
@@ -165,7 +166,10 @@ const InfoFlightOrders = () => {
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Solicitud de componente</Text>
                 <TextInput
-                  style={[styles.input, touched.solicitudComponente && errors.solicitudComponente && styles.inputError]}
+                  style={[
+                    styles.input,
+                    touched.solicitudComponente && errors.solicitudComponente && styles.inputError,
+                  ]}
                   onChangeText={handleChange('solicitudComponente')}
                   onBlur={handleBlur('solicitudComponente')}
                   value={values.solicitudComponente}
@@ -176,16 +180,16 @@ const InfoFlightOrders = () => {
               </View>
               <DropdownButton
                 title="Categoría"
-                onSelect={(option) => {
+                onSelect={option => {
                   console.log('Categoría seleccionada:', option);
-                  setFieldValue('categoria', option);
+                  setFieldValue('categoriaInfoFlightOrders', option);
                 }}
               />
-              {touched.categoria && errors.categoria && (
-                <Text style={styles.errorText}>{errors.categoria}</Text>
+              {touched.categoriaInfoFlightOrders && errors.categoriaInfoFlightOrders && (
+                <Text style={styles.errorText}>{errors.categoriaInfoFlightOrders}</Text>
               )}
               <View style={styles.buttonContainer}>
-                <LargeButton 
+                <LargeButton
                   title="Continuar"
                   onPress={() => {
                     console.log('Valores del formulario antes de enviar:', values);
@@ -234,7 +238,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: '100%',
     marginTop: 20,
-  }
+  },
 });
 
-export default InfoFlightOrders; 
+export default InfoFlightOrders;

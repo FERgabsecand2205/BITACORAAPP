@@ -7,12 +7,21 @@ import { useNavigate } from 'react-router-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const WellcomePage = () => {
+<<<<<<< HEAD
 const navigate = useNavigate();
 
 const checkServerStatus = async () => {
         try {
             console.log('=== Verificando estado del servidor ===');
             const response = await fetch('https://bitacoraapp.onrender.com/api/bitacoras');
+=======
+    const navigate = useNavigate();
+
+    const checkServerStatus = async () => {
+        try {
+            console.log('=== Verificando estado del servidor ===');
+            const response = await fetch('http://localhost:3001/api/bitacoras');
+>>>>>>> main
             if (response.ok) {
                 console.log('✅ Servidor funcionando correctamente');
                 return true;
