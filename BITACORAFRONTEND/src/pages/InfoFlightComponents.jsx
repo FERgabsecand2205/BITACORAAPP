@@ -11,11 +11,21 @@ const API_URL = 'https://bitacoraapp.onrender.com/api';
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
-  numeroParte: Yup.string().required('El número de parte es requerido'),
-  posicion: Yup.string().required('La posición es requerida'),
-  numeroSerieOFF: Yup.string().required('El número de serie OFF es requerido'),
-  numeroSerieON: Yup.string().required('El número de serie ON es requerido'),
-  nomenclatura: Yup.string().required('La nomenclatura es requerida'),
+  numeroParte: Yup.string()
+    .required('El número de parte es requerido')
+    .min(2, 'El número de parte debe tener al menos 2 caracteres'),
+  posicion: Yup.string()
+    .required('La posición es requerida')
+    .min(2, 'La posición debe tener al menos 2 caracteres'),
+  numeroSerieOFF: Yup.string()
+    .required('El número de serie OFF es requerido')
+    .min(2, 'El número de serie OFF debe tener al menos 2 caracteres'),
+  numeroSerieON: Yup.string()
+    .required('El número de serie ON es requerido')
+    .min(2, 'El número de serie ON debe tener al menos 2 caracteres'),
+  nomenclatura: Yup.string()
+    .required('La nomenclatura es requerida')
+    .min(2, 'La nomenclatura debe tener al menos 2 caracteres'),
 });
 
 const InfoFlightComponents = () => {
