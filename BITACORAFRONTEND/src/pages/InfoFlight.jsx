@@ -9,6 +9,8 @@ import DropdownButton from '../components/DropdownButton';
 import DatePickerField from '../components/DatePickerField';
 import { useNavigate, useLocation } from 'react-router-native';
 
+const API_URL = 'https://bitacoraapp.onrender.com/api';
+
 const validationSchema = Yup.object().shape({
   lugarSalida: Yup.string()
     .required('El lugar de salida es requerido')
@@ -61,7 +63,7 @@ const InfoFlight = () => {
 
       // Actualizar la bitácora usando el folio
 
-      const response = await fetch(`http://localhost:3001/api/bitacora/${folio}`, {
+      const response = await fetch(`${API_URL}/bitacora/${folio}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
