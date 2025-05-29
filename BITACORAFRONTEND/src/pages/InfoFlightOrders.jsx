@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
     .min(2, 'La solicitud de componente debe tener al menos 2 caracteres'),
   categoriaInfoFlightOrders: Yup.string()
     .required('La categoría es requerida')
-    .min(2, 'La categoría debe tener al menos 2 caracteres'),
+    .min(1, 'La categoría debe tener al menos 1 caracter'),
 });
 
 const InfoFlightOrders = () => {

@@ -49,7 +49,6 @@ const InfoFlight = () => {
   }, [location.state]);
 
   const handleSubmit = async values => {
-
     try {
       // Obtener el folio de la bitácora desde el estado de navegación
       const folio = location.state?.folio;
@@ -97,7 +96,6 @@ const InfoFlight = () => {
           flightData: values,
           folio: folio,
         },
-
       });
     } catch (error) {
       console.error('Error completo:', error);
@@ -106,7 +104,6 @@ const InfoFlight = () => {
   };
 
   return (
-
     <LayoutScrollViewPage
       header={<HeaderTitle titleName="Información de Vuelo" />}
       body={
@@ -254,12 +251,12 @@ const InfoFlight = () => {
                   numberOfLines={3}
                 />
               </View>
-              <LargeButton 
-                title={<Text style={styles.buttonText}>Continuar</Text>} 
+              <LargeButton
+                title={<Text style={styles.buttonText}>Continuar</Text>}
                 onPress={() => {
                   console.log('Valores del formulario antes de enviar:', values);
                   handleSubmit();
-                }} 
+                }}
               />
             </View>
           )}

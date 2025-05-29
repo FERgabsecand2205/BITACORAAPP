@@ -19,15 +19,18 @@ const Comments = () => {
       }
 
       // 1. Actualizar la bitácora con los comentarios
-      const updateResponse = await fetch(`http://localhost:3001/api/bitacora/id/${bitacoraId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
+      const updateResponse = await fetch(
+        `https://bitacoraapp.onrender.com/api/bitacora/id/${bitacoraId}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            observacionesComments: values.comments,
+          }),
         },
-        body: JSON.stringify({
-          observacionesComments: values.comments,
-        }),
-      });
+      );
 
       if (!updateResponse.ok) {
         throw new Error('Error al actualizar los comentarios');
