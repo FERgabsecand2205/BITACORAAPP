@@ -38,7 +38,7 @@ const Comments = () => {
 
       // 2. Exportar a Excel
       const excelResponse = await fetch(
-        `http://localhost:3001/api/bitacora/${bitacoraId}/export-excel`,
+        `https://bitacoraapp.onrender.com/api/bitacora/${bitacoraId}/export-excel`,
         {
           method: 'POST',
         },
