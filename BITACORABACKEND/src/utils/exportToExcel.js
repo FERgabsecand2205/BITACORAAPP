@@ -27,10 +27,14 @@ async function exportBitacoraToExcel(bitacora) {
     worksheet.getCell('K7').value = bitacora.cargaAceiteMotores;
     worksheet.getCell('N7').value = bitacora.cargaAceiteAPU;
     worksheet.getCell('E9').value = bitacora.fechaInfoFlight ? new Date(bitacora.fechaInfoFlight).toLocaleDateString() : '';
+    worksheet.getCell('E9').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('C9').value = bitacora.categoria;
 
     // 4. Escribir observaciones
     worksheet.getCell('B10').value = bitacora.observacionesInfoFlight;
+    worksheet.getCell('B10').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('B15').value = bitacora.observacionesComments;
+    worksheet.getCell('B15').alignment = { vertical: 'middle', horizontal: 'center' };
 
     // 5. Escribir correcciones
     worksheet.getCell('G9').value = bitacora.correcciones[0].codigoATA;
@@ -74,7 +78,9 @@ async function exportBitacoraToExcel(bitacora) {
     worksheet.getCell('K18').value = bitacora.ordenTrabajo;
     worksheet.getCell('K19').value = bitacora.ordenSuministro;
     worksheet.getCell('K20').value = bitacora.ordenConcentracion;
+    worksheet.getCell('K20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('K21').value = bitacora.solicitudComponente;
+    worksheet.getCell('K21').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell('K22').value = bitacora.categoriaInfoFlightOrders;
 
     // Escribir datos de firma de emisión
@@ -100,12 +106,98 @@ async function exportBitacoraToExcel(bitacora) {
           // Ajustar el tamaño de la imagen para que se ajuste desde E20 hasta E23
           worksheet.addImage(imageId, {
             tl: { col: 4, row: 19 }, // E20
-            br: { col: 4, row: 22 }, // E23
+            br: { col: 5, row: 22 }, // E23
           });
 
           // Asegurarse de que la celda tenga el tamaño adecuado
           worksheet.getRow(20).height = 60;
           worksheet.getColumn(5).width = 30;
+        } catch (error) {
+          console.error('Error al insertar la imagen de la firma:', error);
+        }
+      }
+    }
+
+    // Escribir datos de signatureDoer
+    if (bitacora.signatureDoer) {
+      // Concatenar grado, nombre y matrícula con saltos de línea
+      const doerSignatureText = [
+        bitacora.signatureDoer.grado,
+        bitacora.signatureDoer.nombre,
+        bitacora.signatureDoer.matricula
+      ].filter(Boolean).join('\n');
+      
+      worksheet.getCell('F20').value = doerSignatureText;
+      worksheet.getCell('F20').alignment = { vertical: 'middle', wrapText: true };
+
+      // Escribir el campo mel en G22
+      worksheet.getCell('G22').value = '\n' + (bitacora.signatureDoer.mel || '');
+      worksheet.getCell('G22').alignment = { vertical: 'top', horizontal: 'left', wrapText: true };
+
+      // Insertar la imagen de la firma
+      if (bitacora.signatureDoer.firma?.data) {
+        try {
+          const imageId = workbook.addImage({
+            base64: bitacora.signatureDoer.firma.data,
+            extension: 'png',
+          });
+
+          // Ajustar el tamaño de la imagen para que se ajuste desde G20 hasta H21
+          worksheet.addImage(imageId, {
+            tl: { col: 6, row: 19 }, // G20 (col 6, row 19)
+            br: { col: 8, row: 21 }, // H21 (col 8, row 21) (col is exclusive)
+          });
+
+          // Ajustar tamaño de filas y columnas para mejor visualización
+          worksheet.getRow(20).height = 50;
+          worksheet.getRow(21).height = 50;
+          worksheet.getColumn(7).width = 20; // G
+          worksheet.getColumn(8).width = 20; // H
+        } catch (error) {
+          console.error('Error al insertar la imagen de la firma:', error);
+        }
+      }
+    }
+
+    // Escribir datos de signatureDelivery
+    if (bitacora.signatureDelivery) {
+      // Concatenar grado, nombre y matrícula con saltos de línea
+      const deliverySignatureText = [
+        bitacora.signatureDelivery.grado,
+        bitacora.signatureDelivery.nombre,
+        bitacora.signatureDelivery.matricula
+      ].filter(Boolean).join('\n');
+      
+      worksheet.getCell('M21').value = deliverySignatureText;
+      worksheet.getCell('M21').alignment = { vertical: 'middle', wrapText: true };
+
+      // Insertar la imagen de la firma
+      if (bitacora.signatureDelivery.firma?.data) {
+        try {
+          const imageId = workbook.addImage({
+            base64: bitacora.signatureDelivery.firma.data,
+            extension: 'png',
+          });
+
+          // Ajustar el tamaño de la imagen para que se ajuste desde O21 hasta P23
+          worksheet.addImage(imageId, {
+            tl: { col: 14, row: 20 }, // O21 (col 14, row 20)
+            br: { col: 16, row: 23 }, // P23 (col 16, row 23) (col is exclusive)
+          });
+
+          // Ajustar tamaño de filas y columnas para mejor visualización
+          worksheet.getRow(21).height = 45;
+          worksheet.getRow(22).height = 45;
+          worksheet.getRow(23).height = 45;
+          worksheet.getColumn(15).width = 15; // O
+          worksheet.getColumn(16).width = 15; // P
+
+          // Centrar y ajustar texto en el rango O21:P23
+          for (let row = 21; row <= 23; row++) {
+            for (let col = 15; col <= 16; col++) {
+              worksheet.getCell(row, col).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+            }
+          }
         } catch (error) {
           console.error('Error al insertar la imagen de la firma:', error);
         }

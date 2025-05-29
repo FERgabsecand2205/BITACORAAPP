@@ -181,6 +181,7 @@ app.put('/api/bitacora/:folio', async (req, res) => {
         if (req.body.cargaAceiteMotores !== undefined) updateData.cargaAceiteMotores = req.body.cargaAceiteMotores;
         if (req.body.cargaAceiteAPU !== undefined) updateData.cargaAceiteAPU = req.body.cargaAceiteAPU;
         if (req.body.fecha !== undefined) updateData.fecha = req.body.fecha;
+        if (req.body.fechaInfoFlight !== undefined) updateData.fechaInfoFlight = req.body.fechaInfoFlight;
         if (req.body.categoria !== undefined) updateData.categoria = req.body.categoria;
         if (req.body.observaciones !== undefined) updateData.observaciones = req.body.observaciones;
         if (req.body.correcciones !== undefined) updateData.correcciones = req.body.correcciones;
@@ -189,6 +190,10 @@ app.put('/api/bitacora/:folio', async (req, res) => {
         if (req.body.ordenSuministro !== undefined) updateData.ordenSuministro = req.body.ordenSuministro;
         if (req.body.ordenConcentracion !== undefined) updateData.ordenConcentracion = req.body.ordenConcentracion;
         if (req.body.solicitudComponente !== undefined) updateData.solicitudComponente = req.body.solicitudComponente;
+        if (req.body.categoriaInfoFlightOrders !== undefined) updateData.categoriaInfoFlightOrders = req.body.categoriaInfoFlightOrders;
+        if (req.body.observacionesInfoFlight !== undefined) updateData.observacionesInfoFlight = req.body.observacionesInfoFlight;
+        if (req.body.observacionesInfoFlightPt2 !== undefined) updateData.observacionesInfoFlightPt2 = req.body.observacionesInfoFlightPt2;
+        if (req.body.observacionesComments !== undefined) updateData.observacionesComments = req.body.observacionesComments;
 
         console.log('=== Backend - Intentando actualizar bitácora ===');
         console.log('Folio recibido:', req.params.folio);
