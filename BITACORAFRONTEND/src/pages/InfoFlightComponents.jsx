@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import SmallButton from '../components/SmallButton';
 import { useNavigate, useLocation } from 'react-router-native';
 
 const API_URL = 'https://bitacoraapp.onrender.com/api';
+
+// Esquema de validación con Yup
+const validationSchema = Yup.object().shape({
+  numeroParte: Yup.string().required('El número de parte es requerido'),
+  posicion: Yup.string().required('La posición es requerida'),
+  numeroSerieOFF: Yup.string().required('El número de serie OFF es requerido'),
+  numeroSerieON: Yup.string().required('El número de serie ON es requerido'),
+  nomenclatura: Yup.string().required('La nomenclatura es requerida'),
+});
 
 const InfoFlightComponents = () => {
   const navigate = useNavigate();
@@ -18,7 +28,7 @@ const InfoFlightComponents = () => {
   useEffect(() => {
     console.log('=== InfoFlightComponents - Estado inicial ===');
     console.log('Estado completo recibido:', location.state);
-    
+
     if (location.state?.componentCount) {
       setComponentCount(location.state.componentCount);
     }
