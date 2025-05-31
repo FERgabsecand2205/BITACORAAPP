@@ -9,8 +9,16 @@ import { Ionicons } from '@expo/vector-icons';
 const API_URL = 'http://localhost:3001/api';
 //const API_URL_RENDER = 'https://bitacoraapp.onrender.com/api'; para PROD
 
+const VERSION = 'PROD V1.2';
+
 const WellcomePage = () => {
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    console.log('=== Bitácora App ===');
+    console.log(`Versión: ${VERSION}`);
+    console.log('===================');
+  }, []);
 
   const checkServerStatus = async () => {
     try {
