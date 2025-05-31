@@ -12,11 +12,11 @@ const API_URL = 'http://localhost:3001/api';
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
-  ordenTrabajo: Yup.string().required('La orden de trabajo es requerida'),
-  ordenSuministro: Yup.string().required('La orden de suministro es requerida'),
-  ordenConcentracion: Yup.string().required('La orden de concentración es requerida'),
-  solicitudComponente: Yup.string().required('La solicitud de componente es requerida'),
-  categoriaInfoFlightOrders: Yup.string().required('La categoría es requerida'),
+  ordenTrabajo: Yup.string().nullable().optional(),
+  ordenSuministro: Yup.string().nullable().optional(),
+  ordenConcentracion: Yup.string().nullable().optional(),
+  solicitudComponente: Yup.string().nullable().optional(),
+  categoriaInfoFlightOrders: Yup.string().nullable().optional(),
 });
 
 const InfoFlightOrders = () => {
@@ -27,7 +27,7 @@ const InfoFlightOrders = () => {
   React.useEffect(() => {
     console.log('=== InfoFlightOrders - Estado inicial ===');
     console.log('Estado completo recibido:', location.state);
-    console.log('Folio recibido:', location.state?.folio);
+    console.log('Matrícula recibida:', location.state?.matricula);
     console.log('Datos de componentes:', location.state?.componentData);
     console.log('Datos de vuelo:', location.state?.flightData);
     console.log('Datos de mantenimiento:', location.state?.maintenanceData);
@@ -35,19 +35,19 @@ const InfoFlightOrders = () => {
 
   const handleSubmit = async values => {
     try {
-      const folio = location.state?.folio;
-      if (!folio) {
-        console.error('Error: No se encontró el folio en el estado:', location.state);
-        throw new Error('No se encontró el folio de la bitácora');
+      const matricula = location.state?.matricula;
+      if (!matricula) {
+        console.error('Error: No se encontró la matrícula en el estado:', location.state);
+        throw new Error('No se encontró la matrícula de la bitácora');
       }
 
       console.log('=== InfoFlightOrders - Antes de actualizar ===');
-      console.log('Folio de la bitácora:', folio);
+      console.log('Matrícula de la bitácora:', matricula);
       console.log('Datos a enviar:', values);
       console.log('Estado actual completo:', location.state);
 
       // Actualizar la bitácora con los datos de órdenes
-      const response = await fetch(`${API_URL}/bitacora/${folio}`, {
+      const response = await fetch(`${API_URL}/bitacora/${matricula}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -9,6 +9,7 @@ import { useNavigate, useLocation } from 'react-router-native';
 import '../styles/SignatureDoer.css';
 
 const API_URL = 'http://localhost:3001/api';
+//const API_URL_RENDER = 'https://bitacoraapp.onrender.com/api'; para PROD
 
 const validationSchema = Yup.object().shape({
   grado: Yup.string().required('El grado es requerido'),

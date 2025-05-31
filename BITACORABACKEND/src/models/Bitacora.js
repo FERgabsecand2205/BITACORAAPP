@@ -1,210 +1,287 @@
 const mongoose = require('mongoose');
 
 const bitacoraSchema = new mongoose.Schema({
-    // Campos de la primera página
+    // Campos requeridos de la primera página
     tipoAeronave: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     matricula: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        unique: true
     },
     organismo: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
+    // Campo opcional de la primera página
     folio: {
         type: String,
-        required: true,
-        unique: true
+        required: false,
+        trim: true,
+        default: ''
     },
-    // Campos de InfoFlight (no requeridos inicialmente)
+    // Campos de InfoFlight (todos opcionales)
     lugarSalida: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     lugarLlegada: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     tipoVuelo: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     eventosTorque: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     cargaAceiteMotores: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     cargaAceiteAPU: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
-    fechaInfoFlight: {
+    fecha: {
         type: Date,
+        required: false,
         default: null
     },
     categoria: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
-    // Agregado: observaciones por página
-    observacionesInfoFlight: {
+    observaciones: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
-    // Campos de InfoFlightPt2 (no requeridos inicialmente)
+    // Campos de InfoFlightPt2 (todos opcionales)
     correcciones: [{
-        fechaCorreccion: Date,
-        codigoATA: String,
-        mmReferencia: String
+        fechaCorreccion: {
+            type: Date,
+            required: false,
+            default: Date.now
+        },
+        codigoATA: {
+            type: String,
+            required: false,
+            trim: true,
+            default: ''
+        },
+        mmReferencia: {
+            type: String,
+            required: false,
+            trim: true,
+            default: ''
+        }
     }],
     observacionesInfoFlightPt2: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
-    // Campos de componentes (1 a 3 componentes)
+    // Campos de InfoFlightComponents (todos opcionales)
     componentes: [{
         numeroParte: {
             type: String,
-            required: true
+            required: false,
+            trim: true,
+            default: ''
         },
         posicion: {
             type: String,
-            required: true
+            required: false,
+            trim: true,
+            default: ''
         },
         numeroSerieOFF: {
             type: String,
-            required: true
+            required: false,
+            trim: true,
+            default: ''
         },
         numeroSerieON: {
             type: String,
-            required: true
+            required: false,
+            trim: true,
+            default: ''
         },
         nomenclatura: {
             type: String,
-            required: true
+            required: false,
+            trim: true,
+            default: ''
         }
     }],
-    // Campos de InfoFlightOrders (no requeridos inicialmente)
+    // Campos de InfoFlightOrders (todos opcionales)
     ordenTrabajo: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     ordenSuministro: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     ordenConcentracion: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     solicitudComponente: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
     categoriaInfoFlightOrders: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
     },
-    // Datos de la firma de emisión
-    signatureIssuing: {
-        grado: {
-            type: String,
-            required: false
-        },
-        nombre: {
-            type: String,
-            required: false
-        },
-        matricula: {
-            type: String,
-            required: false
-        },
-        firma: {
-            data: {
-                type: String,
-                required: false
-            },
-            type: {
-                type: String,
-                required: false
-            }
-        },
-        fecha: {
-            type: Date,
-            default: null
-        }
-    },
-    // Datos de la firma de realización
-    signatureDoer: {
-        grado: {
-            type: String,
-            required: false
-        },
-        nombre: {
-            type: String,
-            required: false
-        },
-        matricula: {
-            type: String,
-            required: false
-        },
-        mel: {
-            type: String,
-            required: false
-        },
-        firma: {
-            data: {
-                type: String,
-                required: false
-            },
-            type: {
-                type: String,
-                required: false
-            }
-        },
-        fecha: {
-            type: Date,
-            default: null
-        }
-    },
-    // Datos de la firma de entrega
-    signatureDelivery: {
-        grado: {
-            type: String,
-            required: false
-        },
-        nombre: {
-            type: String,
-            required: false
-        },
-        matricula: {
-            type: String,
-            required: false
-        },
-        firma: {
-            data: {
-                type: String,
-                required: false
-            },
-            type: {
-                type: String,
-                required: false
-            }
-        },
-        fecha: {
-            type: Date,
-            default: null
-        }
+    observacionesInfoFlight: {
+        type: String,
+        required: false,
+        trim: true,
+        default: ''
     },
     observacionesComments: {
         type: String,
+        required: false,
+        trim: true,
         default: ''
+    },
+    // Campos de firma (todos opcionales)
+    signatureIssuing: {
+        grado: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        nombre: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        matricula: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        firma: {
+            data: {
+                type: String,
+                required: false
+            },
+            type: {
+                type: String,
+                required: false
+            }
+        },
+        fecha: {
+            type: Date,
+            required: false,
+            default: null
+        }
+    },
+    signatureDoer: {
+        grado: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        nombre: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        matricula: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        mel: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        firma: {
+            data: {
+                type: String,
+                required: false
+            },
+            type: {
+                type: String,
+                required: false
+            }
+        },
+        fecha: {
+            type: Date,
+            required: false,
+            default: null
+        }
+    },
+    signatureDelivery: {
+        grado: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        nombre: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        matricula: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        firma: {
+            data: {
+                type: String,
+                required: false
+            },
+            type: {
+                type: String,
+                required: false
+            }
+        },
+        fecha: {
+            type: Date,
+            required: false,
+            default: null
+        }
     }
 }, {
     timestamps: true
