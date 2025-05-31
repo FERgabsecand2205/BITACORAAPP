@@ -191,13 +191,6 @@ async function exportBitacoraToExcel(bitacora) {
           worksheet.getRow(23).height = 45;
           worksheet.getColumn(15).width = 15; // O
           worksheet.getColumn(16).width = 15; // P
-
-          // Centrar y ajustar texto en el rango O21:P23
-          for (let row = 21; row <= 23; row++) {
-            for (let col = 15; col <= 16; col++) {
-              worksheet.getCell(row, col).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
-            }
-          }
         } catch (error) {
           console.error('Error al insertar la imagen de la firma:', error);
         }

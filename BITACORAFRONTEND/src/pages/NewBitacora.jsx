@@ -74,15 +74,17 @@ const NewBitacora = () => {
       Alert.alert('Éxito', 'Bitácora creada exitosamente');
       navigate('/InfoFlight', {
         state: {
-          matricula: values.matricula,
+          folio: values.folio || '',
           bitacoraId: data._id,
+          matricula: values.matricula,
         },
       });
 
       console.log('=== NewBitacora - Después de navegar ===');
       console.log('Estado de navegación enviado:', {
-        matricula: values.matricula,
+        folio: values.folio || '',
         bitacoraId: data._id,
+        matricula: values.matricula,
       });
     } catch (error) {
       console.error('Error completo:', error);
