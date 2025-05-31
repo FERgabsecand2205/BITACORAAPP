@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors({
-  origin: ['https://fergabsecand2205.github.io', 'http://localhost:19007', 'http://localhost:3000'],
+  origin: ['https://fergabsecand2205.github.io', 'http://localhost:19006', 'http://localhost:19007', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(bodyParser.json());
@@ -39,40 +39,38 @@ app.post('/api/bitacora', async (req, res) => {
         console.log('=== POST /api/bitacora ===');
         console.log('Datos recibidos:', req.body);
         
-    const data = req.body;
-    
-    // Validar solo los campos de la primera página
-    if (!data.tipoAeronave || !data.matricula || !data.organismo || !data.folio) {
+        const data = req.body;
+        
+        // Validar solo los campos de la primera página
+        if (!data.tipoAeronave || !data.matricula || !data.organismo) {
             console.log('Error: Faltan campos requeridos');
             return res.status(400).json({ 
-                error: 'Todos los campos de la primera página son requeridos',
+                error: 'Los campos tipo de aeronave, matrícula y organismo son requeridos',
                 details: {
                     tipoAeronave: !data.tipoAeronave,
                     matricula: !data.matricula,
-                    organismo: !data.organismo,
-                    folio: !data.folio
+                    organismo: !data.organismo
                 }
             });
         }
 
-        // Verificar si ya existe una bitácora con el mismo folio
-        console.log('Verificando folio duplicado:', data.folio);
-        const existingBitacora = await Bitacora.findOne({ folio: data.folio });
+        // Verificar si ya existe una bitácora con la misma matrícula
+        const existingBitacora = await Bitacora.findOne({ matricula: data.matricula.trim() });
         if (existingBitacora) {
-            console.log('Error: Folio duplicado encontrado');
+            console.log('Error: Matrícula duplicada encontrada');
             return res.status(400).json({ 
-                error: 'Ya existe una bitácora con este folio',
-                details: { folio: data.folio }
+                error: 'Ya existe una bitácora con esta matrícula',
+                details: { matricula: data.matricula }
             });
         }
 
         // Crear nueva bitácora con valores iniciales
         console.log('Creando nueva bitácora...');
-        const bitacora = new Bitacora({
+        const bitacoraData = {
             tipoAeronave: data.tipoAeronave.trim(),
             matricula: data.matricula.trim(),
             organismo: data.organismo.trim(),
-            folio: data.folio.trim(),
+            folio: data.folio ? data.folio.trim() : '',
             // Inicializar campos vacíos
             lugarSalida: '',
             lugarLlegada: '',
@@ -93,7 +91,11 @@ app.post('/api/bitacora', async (req, res) => {
             signatureIssuing: null,
             signatureDoer: null,
             signatureDelivery: null
-        });
+        };
+
+        console.log('Datos de la bitácora a crear:', bitacoraData);
+
+        const bitacora = new Bitacora(bitacoraData);
 
         // Guardar la bitácora
         console.log('Guardando bitácora...');
@@ -111,7 +113,11 @@ app.post('/api/bitacora', async (req, res) => {
             _id: savedBitacora._id
         });
     } catch (error) {
-        console.error('Error al crear la bitácora:', error);
+        console.error('Error detallado al crear la bitácora:', {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
         res.status(500).json({ 
             error: 'Error al crear la bitácora',
             details: error.message,
@@ -171,8 +177,8 @@ app.put('/api/bitacora/id/:id', async (req, res) => {
     }
 });
 
-// Ruta para actualizar una bitácora existente por folio
-app.put('/api/bitacora/:folio', async (req, res) => {
+// Ruta para actualizar una bitácora existente por matrícula
+app.put('/api/bitacora/:matricula', async (req, res) => {
     try {
         const updateData = {};
         
@@ -199,11 +205,11 @@ app.put('/api/bitacora/:folio', async (req, res) => {
         if (req.body.observacionesComments !== undefined) updateData.observacionesComments = req.body.observacionesComments;
 
         console.log('=== Backend - Intentando actualizar bitácora ===');
-        console.log('Folio recibido:', req.params.folio);
+        console.log('Matrícula recibida:', req.params.matricula);
         console.log('Datos a actualizar:', updateData);
 
         const bitacora = await Bitacora.findOneAndUpdate(
-            { folio: req.params.folio },
+            { matricula: req.params.matricula },
             { $set: updateData },
             { new: true, select: { __v: 0, createdAt: 0, updatedAt: 0 } }
         );
@@ -222,7 +228,7 @@ app.put('/api/bitacora/:folio', async (req, res) => {
             });
         } else {
             console.log('=== Backend - Bitácora no encontrada ===');
-            console.log('Folio buscado:', req.params.folio);
+            console.log('Matrícula buscada:', req.params.matricula);
             res.status(404).json({ error: 'Bitácora no encontrada' });
         }
     } catch (error) {
@@ -259,10 +265,10 @@ app.get('/api/bitacora/id/:id', async (req, res) => {
 });
 
 // Ruta para agregar una corrección a una bitácora existente
-app.patch('/api/bitacora/:folio/correcciones', async (req, res) => {
+app.patch('/api/bitacora/:matricula/correcciones', async (req, res) => {
     try {
         console.log('=== Backend - Intentando agregar corrección ===');
-        console.log('Folio recibido:', req.params.folio);
+        console.log('Matrícula recibida:', req.params.matricula);
         console.log('Datos de corrección:', req.body);
 
         // Validar que se proporcione una corrección
@@ -271,7 +277,7 @@ app.patch('/api/bitacora/:folio/correcciones', async (req, res) => {
         }
 
         const bitacora = await Bitacora.findOneAndUpdate(
-            { folio: req.params.folio },
+            { matricula: req.params.matricula },
             { 
                 $push: { 
                     correcciones: {
@@ -295,7 +301,7 @@ app.patch('/api/bitacora/:folio/correcciones', async (req, res) => {
             });
         } else {
             console.log('=== Backend - Bitácora no encontrada ===');
-            console.log('Folio buscado:', req.params.folio);
+            console.log('Matrícula buscada:', req.params.matricula);
             res.status(404).json({ error: 'Bitácora no encontrada' });
         }
     } catch (error) {

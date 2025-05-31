@@ -7,25 +7,16 @@ import HeaderTitle from '../components/HeaderTitle';
 import SmallButton from '../components/SmallButton';
 import { useNavigate, useLocation } from 'react-router-native';
 
-const API_URL = 'https://bitacoraapp.onrender.com/api';
+//const API_URL_local = 'http://localhost:3001/api';
+const API_URL = 'https://bitacoraapp.onrender.com/api'; // para PROD
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
-  numeroParte: Yup.string()
-    .required('El número de parte es requerido')
-    .min(2, 'El número de parte debe tener al menos 2 caracteres'),
-  posicion: Yup.string()
-    .required('La posición es requerida')
-    .min(2, 'La posición debe tener al menos 2 caracteres'),
-  numeroSerieOFF: Yup.string()
-    .required('El número de serie OFF es requerido')
-    .min(2, 'El número de serie OFF debe tener al menos 2 caracteres'),
-  numeroSerieON: Yup.string()
-    .required('El número de serie ON es requerido')
-    .min(2, 'El número de serie ON debe tener al menos 2 caracteres'),
-  nomenclatura: Yup.string()
-    .required('La nomenclatura es requerida')
-    .min(2, 'La nomenclatura debe tener al menos 2 caracteres'),
+  numeroParte: Yup.string().nullable().optional(),
+  posicion: Yup.string().nullable().optional(),
+  numeroSerieOFF: Yup.string().nullable().optional(),
+  numeroSerieON: Yup.string().nullable().optional(),
+  nomenclatura: Yup.string().nullable().optional(),
 });
 
 const InfoFlightComponents = () => {
@@ -90,21 +81,21 @@ const InfoFlightComponents = () => {
         throw new Error('Debe agregar al menos un componente');
       }
 
-      // Obtener el folio del estado
-      const folio = location.state?.folio;
-      console.log('Folio obtenido del estado:', folio);
+      // Obtener la matrícula del estado
+      const matricula = location.state?.matricula;
+      console.log('Matrícula obtenida del estado:', matricula);
 
-      if (!folio) {
+      if (!matricula) {
         console.error('Estado actual:', location.state);
-        throw new Error('No se encontró el folio de la bitácora');
+        throw new Error('No se encontró la matrícula de la bitácora');
       }
 
       console.log('=== InfoFlightComponents - Enviando datos al servidor ===');
-      console.log('URL:', `${API_URL}/bitacora/${folio}`);
+      console.log('URL:', `${API_URL}/bitacora/${matricula}`);
       console.log('Datos a enviar:', { componentes: allComponents });
 
       // Actualizar la bitácora con los componentes
-      const response = await fetch(`${API_URL}/bitacora/${folio}`, {
+      const response = await fetch(`${API_URL}/bitacora/${matricula}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +117,7 @@ const InfoFlightComponents = () => {
       // Navegar a la siguiente página con los datos actualizados
       const nextState = {
         componentData: allComponents,
-        folio: folio,
+        matricula: matricula,
         flightData: location.state?.flightData,
         maintenanceData: location.state?.maintenanceData,
       };

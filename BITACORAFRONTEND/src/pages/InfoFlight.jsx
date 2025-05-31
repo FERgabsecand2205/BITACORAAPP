@@ -23,11 +23,13 @@ const validationSchema = Yup.object().shape({
     .min(2, 'El tipo de vuelo debe tener al menos 2 caracteres'),
   eventosTorque: Yup.string().required('Los eventos de torque son requeridos'),
   cargaAceiteMotores: Yup.string()
-    .required('La carga de aceite de motores es requerida')
-    .matches(/^\d+(\.\d+)?$/, 'Debe ser un número válido'),
+    .matches(/^\d+(\.\d+)?$/, 'Debe ser un número válido')
+    .nullable()
+    .optional(),
   cargaAceiteAPU: Yup.string()
-    .required('La carga de aceite APU es requerida')
-    .matches(/^\d+(\.\d+)?$/, 'Debe ser un número válido'),
+    .matches(/^\d+(\.\d+)?$/, 'Debe ser un número válido')
+    .nullable()
+    .optional(),
   fechaInfoFlight: Yup.string()
     .required('La fecha es requerida')
     .matches(/^\d{4}-\d{2}-\d{2}$/, 'La fecha debe tener el formato YYYY-MM-DD'),
@@ -44,25 +46,24 @@ const InfoFlight = () => {
   React.useEffect(() => {
     console.log('=== InfoFlight - Al recibir el estado ===');
     console.log('Estado recibido:', location.state);
-    console.log('ID de la bitácora recibido:', location.state?.bitacoraId);
-    console.log('Folio recibido:', location.state?.folio);
+    console.log('Datos de vuelo recibidos:', location.state?.flightData);
+    console.log('Matrícula recibida:', location.state?.matricula);
   }, [location.state]);
 
   const handleSubmit = async values => {
     try {
-      // Obtener el folio de la bitácora desde el estado de navegación
-      const folio = location.state?.folio;
-      if (!folio) {
-        throw new Error('No se encontró el folio de la bitácora');
+      // Obtener la matrícula de la bitácora desde el estado de navegación
+      const matricula = location.state?.matricula;
+      if (!matricula) {
+        throw new Error('No se encontró la matrícula de la bitácora');
       }
 
       console.log('=== InfoFlight - Antes de actualizar ===');
-      console.log('Folio de la bitácora:', folio);
+      console.log('Matrícula de la bitácora:', matricula);
       console.log('Datos a enviar:', values);
 
-      // Actualizar la bitácora usando el folio
-
-      const response = await fetch(`${API_URL}/bitacora/${folio}`, {
+      // Actualizar la bitácora usando la matrícula
+      const response = await fetch(`${API_URL}/bitacora/${matricula}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -88,13 +89,13 @@ const InfoFlight = () => {
       console.log('=== InfoFlight - Antes de navegar ===');
       console.log('Estado a enviar:', {
         flightData: values,
-        folio: folio,
+        matricula: matricula,
       });
 
       navigate('/InfoFlightPt2', {
         state: {
           flightData: values,
-          folio: folio,
+          matricula: matricula,
         },
       });
     } catch (error) {
@@ -109,18 +110,20 @@ const InfoFlight = () => {
       body={
         <Formik
           initialValues={{
-            lugarSalida: '',
-            lugarLlegada: '',
-            tipoVuelo: '',
-            eventosTorque: '',
-            cargaAceiteMotores: '',
-            cargaAceiteAPU: '',
-            fechaInfoFlight: date.toISOString().split('T')[0],
-            categoria: '',
-            observaciones: '',
+            lugarSalida: location.state?.flightData?.lugarSalida || '',
+            lugarLlegada: location.state?.flightData?.lugarLlegada || '',
+            tipoVuelo: location.state?.flightData?.tipoVuelo || '',
+            eventosTorque: location.state?.flightData?.eventosTorque || '',
+            cargaAceiteMotores: location.state?.flightData?.cargaAceiteMotores || '',
+            cargaAceiteAPU: location.state?.flightData?.cargaAceiteAPU || '',
+            fechaInfoFlight:
+              location.state?.flightData?.fechaInfoFlight || date.toISOString().split('T')[0],
+            categoria: location.state?.flightData?.categoria || '',
+            observaciones: location.state?.flightData?.observaciones || '',
           }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
+          enableReinitialize
         >
           {({ handleChange, handleBlur, handleSubmit, values, setFieldValue, errors, touched }) => (
             <View style={styles.body}>

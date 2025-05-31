@@ -7,6 +7,9 @@ import LayoutPage from '../components/LayoutPage'; // Importar LayoutPage
 import HeaderTitle from '../components/HeaderTitle'; // Importar HeaderTitle
 import LargeButton from '../components/LargeButton'; // Importar LargeButton
 
+const API_URL = 'http://localhost:3001/api';
+//const API_URL_RENDER = 'https://bitacoraapp.onrender.com/api'; para PROD
+
 const validationSchema = Yup.object().shape({
   tipoAeronave: Yup.string()
     .required('El tipo de aeronave es requerido')
@@ -21,8 +24,9 @@ const validationSchema = Yup.object().shape({
     .required('El organismo es requerido')
     .min(2, 'El organismo debe tener al menos 2 caracteres'),
   folio: Yup.string()
-    .required('El folio es requerido')
-    .matches(/^\d{4}-\d{3}$/, 'El folio debe tener el formato YYYY-XXX (ejemplo: 2024-001)'),
+    .matches(/^\d{4}-\d{3}$/, 'El folio debe tener el formato YYYY-XXX (ejemplo: 2024-001)')
+    .nullable()
+    .optional(),
 });
 
 const NewBitacora = () => {
@@ -33,20 +37,23 @@ const NewBitacora = () => {
       console.log('=== NewBitacora - Intentando crear bitácora ===');
       console.log('Datos a enviar:', values);
 
-      const response = await fetch('https://bitacoraapp.onrender.com/api/bitacora', {
+      const response = await fetch(`${API_URL}/bitacora`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({
+          ...values,
+          folio: values.folio || '', // Asegurar que folio sea string vacío si es null o undefined
+        }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        if (errorData.error === 'Ya existe una bitácora con este folio') {
+        if (errorData.error === 'Ya existe una bitácora con esta matrícula') {
           Alert.alert(
-            'Folio duplicado',
-            'El folio que intentas usar ya existe. Por favor, usa un folio diferente.',
+            'Matrícula duplicada',
+            'Ya existe una bitácora con esta matrícula. Por favor, verifica la matrícula e intenta nuevamente.',
             [
               {
                 text: 'Entendido',
@@ -62,19 +69,19 @@ const NewBitacora = () => {
       const data = await response.json();
       console.log('=== NewBitacora - Bitácora creada exitosamente ===');
       console.log('ID recibido del backend:', data._id);
-      console.log('Folio:', values.folio);
+      console.log('Matrícula:', values.matricula);
 
       Alert.alert('Éxito', 'Bitácora creada exitosamente');
       navigate('/InfoFlight', {
         state: {
-          folio: values.folio,
+          matricula: values.matricula,
           bitacoraId: data._id,
         },
       });
 
       console.log('=== NewBitacora - Después de navegar ===');
       console.log('Estado de navegación enviado:', {
-        folio: values.folio,
+        matricula: values.matricula,
         bitacoraId: data._id,
       });
     } catch (error) {

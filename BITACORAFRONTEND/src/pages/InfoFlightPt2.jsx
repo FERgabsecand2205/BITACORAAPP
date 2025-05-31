@@ -9,11 +9,14 @@ import SegmentedInput from '../components/SegmentedInput';
 import DatePickerField from '../components/DatePickerField';
 import { useNavigate, useLocation } from 'react-router-native';
 
+//const API_URL_local = 'http://localhost:3001/api';
+const API_URL = 'https://bitacoraapp.onrender.com/api'; // para PROD
+
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
-  fechaCorreccion: Yup.string().required('La fecha es requerida'),
-  codigoATA: Yup.string().required('El código A.T.A. es requerido'),
-  mmReferencia: Yup.string().required('La referencia del manual de mantenimiento es requerida'),
+  fechaCorreccion: Yup.string().nullable().optional(),
+  codigoATA: Yup.string().nullable().optional(),
+  mmReferencia: Yup.string().nullable().optional(),
   observaciones: Yup.string(), // Campo opcional
 });
 
@@ -31,17 +34,17 @@ const InfoFlightPt2 = () => {
 
   const handleSubmit = async values => {
     try {
-      const folio = location.state?.folio;
-      if (!folio) {
-        throw new Error('No se encontró el folio de la bitácora');
+      const matricula = location.state?.matricula;
+      if (!matricula) {
+        throw new Error('No se encontró la matrícula de la bitácora');
       }
 
       console.log('=== InfoFlightPt2 - Antes de actualizar ===');
-      console.log('Folio de la bitácora:', folio);
+      console.log('Matrícula de la bitácora:', matricula);
       console.log('Datos a enviar:', values);
 
       // Actualizar la bitácora
-      const response = await fetch(`https://bitacoraapp.onrender.com/api/bitacora/${folio}`, {
+      const response = await fetch(`${API_URL}/bitacora/${matricula}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -75,14 +78,14 @@ const InfoFlightPt2 = () => {
       console.log('Estado a enviar:', {
         flightData: location.state?.flightData,
         maintenanceData: values,
-        folio: folio,
+        matricula: matricula,
       });
 
       navigate('/InfoFlightComponents', {
         state: {
           flightData: location.state?.flightData,
           maintenanceData: values,
-          folio: folio,
+          matricula: matricula,
         },
       });
     } catch (error) {
@@ -154,7 +157,15 @@ const InfoFlightPt2 = () => {
               <View style={styles.buttonContainer}>
                 <SmallButton
                   title="Previo"
-                  onPress={() => navigate('/InfoFlight')}
+                  onPress={() =>
+                    navigate('/InfoFlight', {
+                      state: {
+                        matricula: location.state?.matricula,
+                        flightData: location.state?.flightData,
+                        isEditing: true,
+                      },
+                    })
+                  }
                   style={{ backgroundColor: '#3f51b5' }}
                 />
                 <SmallButton title="Continuar" onPress={handleSubmit} />

@@ -1,6 +1,5 @@
 import React from 'react';
 import { NativeRouter, Route, Routes } from 'react-router-native';
-import HomePage from './HomePage';
 import WelcomePage from './WelcomePage';
 import NewBitacora from './NewBitacora';
 import InfoFlight from './InfoFlight';
@@ -23,7 +22,6 @@ const Main = () => {
       <AppBar />
       <Routes>
         <Route path="/" element={<WelcomePage />} />
-        <Route path="/home" element={<HomePage />} />
         <Route path="/newBitacora" element={<NewBitacora />} />
         <Route path="/InfoFlight" element={<InfoFlight />} />
         <Route path="/InfoFlightPt2" element={<InfoFlightPt2 />} />

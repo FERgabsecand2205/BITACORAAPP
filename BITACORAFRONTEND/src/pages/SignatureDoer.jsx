@@ -19,7 +19,10 @@ const validationSchema = Yup.object().shape({
     .matches(/^[A-Za-zÁáÉéÍíÓóÚúÑñ\s]+$/, 'El nombre solo debe contener letras y espacios'),
   matricula: Yup.string()
     .required('La matrícula es requerida')
-    .matches(/^[A-Z0-9-]+$/, 'La matrícula solo debe contener letras mayúsculas, números y guiones'),
+    .matches(
+      /^[A-Z0-9-]+$/,
+      'La matrícula solo debe contener letras mayúsculas, números y guiones',
+    ),
   mel: Yup.string()
     .required('El MEL es requerido')
     .min(2, 'El MEL debe tener al menos 2 caracteres'),
