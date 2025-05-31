@@ -9,9 +9,11 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build:web": "expo export:web",
-    "deploy": "yarn build:web && cp -r web-build/* dist/",
+    "predeploy": "yarn build:web",
+    "deploy": "gh-pages -d web-build",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json}\"",
+    "test": "jest"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
@@ -60,7 +62,8 @@
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.0.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "gh-pages": "^6.1.1"
   },
   "private": true
 }
