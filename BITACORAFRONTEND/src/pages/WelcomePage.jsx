@@ -15,6 +15,9 @@ const WellcomePage = () => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
+    // Actualizar el título de la página
+    document.title = `Bitácora App ${VERSION}`;
+
     console.log('=== Bitácora App ===');
     console.log(`Versión: ${VERSION}`);
     console.log('===================');
