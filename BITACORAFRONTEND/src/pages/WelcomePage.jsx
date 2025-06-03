@@ -5,11 +5,9 @@ import LayoutPage from '../components/LayoutPage'; // Importar LayoutPage
 import HeaderTitle from '../components/HeaderTitle'; // Importar HeaderTitle
 import { useNavigate } from 'react-router-native';
 import { Ionicons } from '@expo/vector-icons';
+import { API_URL } from '../utils/api';
 
-//const API_URL = 'http://localhost:3001/api';
-const API_URL_RENDER = 'https://bitacoraapp.onrender.com/api'; // para PROD
-
-const VERSION = 'PROD V1.2';
+const VERSION = 'PROD V1.3';
 
 const WellcomePage = () => {
   const navigate = useNavigate();
@@ -26,7 +24,7 @@ const WellcomePage = () => {
   const checkServerStatus = async () => {
     try {
       console.log('=== Verificando estado del servidor ===');
-      const response = await fetch(`${API_URL_RENDER}/bitacoras`);
+      const response = await fetch(`${API_URL}/bitacoras`);
       if (response.ok) {
         console.log('✅ Servidor funcionando correctamente');
         return true;
@@ -39,7 +37,7 @@ const WellcomePage = () => {
       console.log('   cd BITACORABACKEND');
       console.log('3. Inicia el servidor:');
       console.log('   node src/server.js');
-      console.log('4. Espera a ver el mensaje: "Servidor corriendo en http://localhost:3001"');
+      console.log(`4. Espera a ver el mensaje: "Servidor corriendo en ${API_URL}"`);
       return false;
     }
   };

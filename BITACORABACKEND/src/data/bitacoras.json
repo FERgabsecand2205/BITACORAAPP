@@ -1,39 +1,5 @@
 [
   {
-    "signatureIssuing": {
-      "firma": {
-        "data": "",
-        "type": ""
-      },
-      "grado": "",
-      "nombre": "",
-      "matricula": "",
-      "fecha": null
-    },
-    "signatureDoer": {
-      "firma": {
-        "data": "",
-        "type": ""
-      },
-      "grado": "",
-      "nombre": "",
-      "matricula": "",
-      "mel": "",
-      "fecha": null
-    },
-    "signatureDelivery": {
-      "firma": {
-        "data": "",
-        "type": ""
-      },
-      "grado": "",
-      "nombre": "",
-      "matricula": "",
-      "fecha": null
-    },
-    "fecha": null,
-    "observaciones": "",
-    "_id": "683a7268c46e33bd01f54b22",
     "tipoAeronave": "Aeronave 1",
     "matricula": "1234",
     "organismo": "Sedena",
@@ -44,90 +10,45 @@
     "eventosTorque": "",
     "cargaAceiteMotores": "",
     "cargaAceiteAPU": "",
-    "fechaInfoFlight": null,
+    "fecha": null,
     "categoria": "",
-    "observacionesInfoFlight": "",
+    "observaciones": "",
     "correcciones": [],
-    "observacionesInfoFlightPt2": "",
     "componentes": [],
     "ordenTrabajo": "",
     "ordenSuministro": "",
     "ordenConcentracion": "",
     "solicitudComponente": "",
-    "categoriaInfoFlightOrders": "",
-    "observacionesComments": ""
-  },
-  {
     "signatureIssuing": {
+      "grado": "",
+      "nombre": "",
+      "matricula": "",
       "firma": {
-        "data": "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",
-        "type": "image/png"
+        "data": "",
+        "type": ""
       },
-      "grado": "grado emisor",
-      "nombre": "nombre emisor",
-      "matricula": "122323443",
-      "fecha": "2025-05-31T03:21:52.806Z"
+      "fecha": null
     },
     "signatureDoer": {
+      "grado": "",
+      "nombre": "",
+      "matricula": "",
       "firma": {
-        "data": "data:image/png;base64,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",
-        "type": "image/png"
+        "data": "",
+        "type": ""
       },
-      "grado": "grado accion",
-      "nombre": "nombre accion",
-      "matricula": "764654",
-      "mel": "544545",
-      "fecha": "2025-05-31T03:22:06.609Z"
+      "mel": "",
+      "fecha": null
     },
     "signatureDelivery": {
+      "grado": "",
+      "nombre": "",
+      "matricula": "",
       "firma": {
-        "data": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAAAXNSR0IArs4c6QAACuZJREFUeF7t3V/of/ccB/DntBSjzf/SKPmTC2UzimRFuXDBhvm3ZdpKzW5cuKCWtknEhTvNZtTQDGH+5IILohD7IxcaIq1ZVsJoXFg4b51vfXx9+ZzPv/M9r3Men/r1W+18znm9H69Xz87n8zufc86IFwECBIoInFGkTmUSIEAgAssQECBQRkBglWmVQgkQEFhmgACBMgICq0yrFEqAgMAyAwQIlBEQWGVapVACBASWGSBAoIyAwCrTKoUSICCwzAABAmUEBFaZVimUAAGBZQYIECgjILDKtEqhBAgILDNAgEAZAYFVplUKJUBAYJkBAgTKCAisMq1SKAECAssMECBQRkBglWmVQgkQEFhmgACBMgICq0yrFEqAgMAyAwQIlBEQWGVapVACBASWGSBAoIyAwCrTKoUSICCwzAABAmUEBFaZVimUAAGBZQYIECgjILDKtEqhBAgILDNAgEAZAYFVplUKJUBAYJkBAgTKCAisMq1SKAECAssMECBQRkBglWmVQgkQEFhmgACBMgICq0yrFEqAgMAyAwQIlBEQWGVapVACBASWGSBAoIyAwCrTKoUSICCwzAABAmUEBFaZVimUAAGBZQYIECgjILDKtEqhBAgILDNAgEAZAYFVplUKJUBAYJkBAgTKCAisMq1SKAECAssMECBQRkBglWmVQgkQEFhmgACBMgICq0yrFEqAgMAyAwQIlBEQWGVapVACBASWGSBAoIyAwCrTKoUSICCwzAABAmUEBFaZVimUAAGBZQYIECgjILDKtEqhBAgILDNAgEAZAYFVplUKJUBAYJkBAgTKCAisMq1SKAECAssMECBQRkBglWmVQgkQEFhmgACBMgICq0yrFEqAgMAyAwQIlBEQWGVapVACBASWGSBAoIyAwCrTKoUSICCwzAABAmUEBFaZVimUAAGBZQYIECgjILDKtEqhBAgILDNAgEAZAYFVplUKJUBAYJkBAgTKCAisMq1SKAECAssMECBQRkBglWnVZAo9O8mDk6lGIYsSEFiLavd/LPasJBes/Hl5kqcO5PhskksHbmszAnsTEFh7oyyxo3OTvCHJlUmet2PFNyS5esd9eDuBjQQE1kZcJTduZ01vTnJJkpccW8G9Sb6X5K4kdyS5M8lDa1b5qSRvTfKHJE9J8nBJFUWXFBBYJdu2tuhHJnldkmtOOJP6QZIvJPlckvvX7um/NzgzyQNJHp/kxiRXbbEPbyGwlYDA2optsm86P8ll/Ue+x61UeU/3/dRNfVDdt4fqv5TktUna2dbb9rA/uyAwSEBgDWIqsdEnk1yxUukfk9yc5GNJfr3nFVzb7e+6JNf3f+9593ZH4GQBgTWPybilC6XL+6X8PMl7k9zefST8+4GWJ7AOBGu3/19AYM1jQo4Ca6zLDdrZVQstZ1jzmJ8yqxBYZVq1ttAxL+gUWGvbYYNDCAisQ6jOf59HgXX0Pdb8V2yFkxAQWJNoQ7kiBFa5ls2jYIE1jz6OvYrP9JdP3JbkLWMf3PGWKyCwltv7XVb+zSSvTHJrH1y77Mt7CQwWEFiDqWy4IvDlJBcnuSjJV8kQGEtAYI0lPa/j3N1d53Vekud3PwH66byWZjVTFhBYU+7OdGtrV9Gfk+TRSf423TJVNjcBgTW3jh5+PY9K8tckLbTaD6C9CIwmILBGo57NgdrHwJ9031+1j4UvmM2qLKSEgMAq0aZJFdm+aG+/U2xfvLdb2HgRGE1AYI1GPZsDfbS/02gLrXaLGS8CowkIrNGoZ3OgHyd5YZL393eFmM3CLGT6AgJr+j2aUoWPTfL7vqAnJvnLlIpTy/wFBNb8e7zPFbZ7ube7jH6tuw/8a/a5Y/siMERAYA1Rss2RQLuq/dX9Qyja7wm9CIwqILBG5S59MB8HS7dvHsULrHn0cYxVfDDJe/rHgl04xgEdg8BxAYFlJoYIPKl/kMVj+tD60JA32YbAvgUE1r5F57m/L/YXibbnGb5xnku0qgoCAqtCl063xvZo+8/3T3p+dv/36Vbk6IsVEFiLbf2ghbcfN/+y/5Hz65O0B6h6ETg1AYF1avQlDuyjYIk2LadIgbWcXm+60vf1P735c5Jn+Ci4KZ/tDyEgsA6hWn+fZyb5bZInJ/lA9wTpa+ovyQrmICCw5tDF/a/h7UluSnJvkmcmeXj/h7BHApsLCKzNzeb+jnZ29askT+/Oslpw3Tz3BVtfHQGBVadXY1T6iO6M6tNJLk3yuyRPc3Y1BrtjDBUQWEOl5rPdJ7qPelceYDntWq32UNV/HGDfdkng3wICa3mDcFeS8w+07B92P+G5vL9260CHsNslCwis5XX/KLB+0Z8NPXeFoN0+pt32eNOzpHYFfLtP1ouT/DNJu43yO7fYz/K6YcUbCQisjbhmsfFJZ1jf6O4e+q4k9+ywwvb918eTXNGfuTvb2gHTW08WEFjLm4zV77DatVYtYL61R4bVs62223d3D1z98B73b1cLFhBYC27+AZe++q+ND3SXRpzrXxsPqL2gXQusBTV75KWuXi3vCTsj48/1cAJrrp2dxrpu6K7nuirJ97uPnS+dRkmqqCwgsCp3b/q1uw/89HtUqkKBVapdJYu9u3u0/XlJbuzPtkouQtHTEBBY0+jDnKu4pb+Y9NbugtLL5rxQazu8gMA6vPHSj/CV/qGr7e+Ll45h/bsJCKzd/Lx7vcDtSS7qfg4ksNZb2WKNgMAyIocWuK77uc613dXv13cHav/tRWBrAYG1NZ03DhS4LcmbknhE2EAwm/1vAYFlOg4p0C4ebffVekKSdk3W1Yc8mH3PX0Bgzb/Hp7HC9lOc9jzDdtHoc5L4ec5pdGGGxxRYM2zqKS6p/Yaw3VK5/aB69fWR/m4Qp1iaQ89BQGDNoYvD1nB2kgeHbbrVVsfv0vCzPrzad1f3bbVHbyJwTEBgLWMk2tObn5XkN/0zBvex6nOSXJjkFUle1X/0a/t1H6x96NrHiQICaxmDcRRYbbV3JHnRhss+K8kFK39e1j9V5/hu2qPB3uFOoxvq2nywgMAaTFV+wx9tEVTrFt2C8OtJvtOdaX03yZ/WvcH/J7CLgMDaRa/ee9v3SZdsWfb9Sb7d/cym3WK5naXdmeShLfflbQS2EhBYW7GVftOhv3wvjaP4aQsIrGn3R3UECKwICCzjQIBAGQGBVaZVCiVAQGCZAQIEyggIrDKtUigBAgLLDBAgUEZAYJVplUIJEBBYZoAAgTICAqtMqxRKgIDAMgMECJQREFhlWqVQAgQElhkgQKCMgMAq0yqFEiAgsMwAAQJlBARWmVYplAABgWUGCBAoIyCwyrRKoQQICCwzQIBAGQGBVaZVCiVAQGCZAQIEyggIrDKtUigBAgLLDBAgUEZAYJVplUIJEBBYZoAAgTICAqtMqxRKgIDAMgMECJQREFhlWqVQAgQElhkgQKCMgMAq0yqFEiAgsMwAAQJlBARWmVYplAABgWUGCBAoIyCwyrRKoQQICCwzQIBAGQGBVaZVCiVAQGCZAQIEyggIrDKtUigBAgLLDBAgUEZAYJVplUIJEBBYZoAAgTICAqtMqxRKgIDAMgMECJQREFhlWqVQAgQElhkgQKCMgMAq0yqFEiAgsMwAAQJlBARWmVYplAABgWUGCBAoIyCwyrRKoQQICCwzQIBAGQGBVaZVCiVAQGCZAQIEyggIrDKtUigBAgLLDBAgUEZAYJVplUIJEBBYZoAAgTIC/wKJK7jJICGHywAAAABJRU5ErkJggg==",
-        "type": "image/png"
+        "data": "",
+        "type": ""
       },
-      "grado": "grado entrega",
-      "nombre": "nombre entrega",
-      "matricula": "754654",
-      "fecha": "2025-05-31T03:22:20.608Z"
-    },
-    "_id": "683a75a46b87cd7b5ac77ad1",
-    "tipoAeronave": "bell 123",
-    "matricula": "1",
-    "organismo": "sedena",
-    "folio": "",
-    "lugarSalida": "cdmx",
-    "lugarLlegada": "gdl",
-    "tipoVuelo": "pricado",
-    "eventosTorque": "1000",
-    "cargaAceiteMotores": "",
-    "cargaAceiteAPU": "",
-    "fecha": null,
-    "categoria": "A",
-    "observaciones": "",
-    "correcciones": [
-      {
-        "fechaCorreccion": "2025-05-31T00:00:00.000Z",
-        "codigoATA": "",
-        "mmReferencia": "",
-        "_id": "683a75ba6b87cd7b5ac77ad6"
-      }
-    ],
-    "observacionesInfoFlightPt2": "",
-    "componentes": [
-      {
-        "numeroParte": "",
-        "posicion": "",
-        "numeroSerieOFF": "",
-        "numeroSerieON": "",
-        "nomenclatura": "",
-        "_id": "683a75bd6b87cd7b5ac77adb"
-      }
-    ],
-    "ordenTrabajo": "",
-    "ordenSuministro": "",
-    "ordenConcentracion": "",
-    "solicitudComponente": "",
-    "categoriaInfoFlightOrders": "",
-    "observacionesInfoFlight": "",
-    "observacionesComments": ""
+      "fecha": null
+    }
   }
-]
+] 

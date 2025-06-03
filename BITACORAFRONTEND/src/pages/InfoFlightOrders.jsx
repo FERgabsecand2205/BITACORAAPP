@@ -7,8 +7,12 @@ import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
 import DropdownButton from '../components/DropdownButton';
 import { useNavigate, useLocation } from 'react-router-native';
+<<<<<<< HEAD
 
 const API_URL = 'https://bitacoraapp.onrender.com/api';
+=======
+import { API_URL } from '../utils/api';
+>>>>>>> main
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({

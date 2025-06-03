@@ -6,9 +6,13 @@ import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import SmallButton from '../components/SmallButton';
 import { useNavigate, useLocation } from 'react-router-native';
+<<<<<<< HEAD
 
 //const API_URL_local = 'http://localhost:3001/api';
 const API_URL = 'https://bitacoraapp.onrender.com/api'; // para PROD
+=======
+import { API_URL } from '../utils/api';
+>>>>>>> main
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
