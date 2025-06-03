@@ -5,11 +5,9 @@ import LayoutPage from '../components/LayoutPage'; // Importar LayoutPage
 import HeaderTitle from '../components/HeaderTitle'; // Importar HeaderTitle
 import { useNavigate } from 'react-router-native';
 import { Ionicons } from '@expo/vector-icons';
+import { API_URL } from '../utils/api';
 
-const API_URL = 'http://localhost:3001/api';
-//const API_URL_RENDER = 'https://bitacoraapp.onrender.com/api'; para PROD
-
-const VERSION = 'PROD V1.2';
+const VERSION = 'PROD V1.3';
 
 const WellcomePage = () => {
   const navigate = useNavigate();

@@ -7,8 +7,7 @@ import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
 import { useNavigate, useLocation } from 'react-router-native';
 import '../styles/SignatureIssuing.css';
-
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '../utils/api';
 
 const validationSchema = Yup.object().shape({
   grado: Yup.string().required('El grado es requerido'),
@@ -91,8 +90,14 @@ const SignatureIssuing = () => {
 
   const handleSubmit = async values => {
     console.log('=== SignatureIssuing - handleSubmit ===');
+    console.log('User Agent:', navigator.userAgent);
     console.log('Valores del formulario:', values);
     console.log('Imagen de firma:', signatureImage ? 'Presente' : 'No presente');
+    if (signatureImage) {
+      console.log('Longitud de la firma:', signatureImage.length);
+      console.log('Primeros 100 caracteres de la firma:', signatureImage.substring(0, 100));
+      console.log('¿Base64?', signatureImage.startsWith('data:image'));
+    }
     console.log('BitacoraId a enviar:', bitacoraId);
     console.log('Estado original a mantener:', originalState);
 
@@ -109,9 +114,13 @@ const SignatureIssuing = () => {
     try {
       // Asegurarse de que la imagen de la firma esté en el formato correcto
       let base64Image = signatureImage;
-      if (signatureImage.startsWith('data:image')) {
+      if (signatureImage && signatureImage.startsWith('data:image')) {
         base64Image = signatureImage.split(',')[1];
       }
+      console.log(
+        'Firma enviada al backend (primeros 100):',
+        base64Image ? base64Image.substring(0, 100) : 'No hay firma',
+      );
 
       const response = await fetch(`${API_URL}/bitacora/signature-issuing`, {
         method: 'POST',

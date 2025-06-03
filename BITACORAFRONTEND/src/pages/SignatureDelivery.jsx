@@ -7,8 +7,7 @@ import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
 import { useNavigate, useLocation } from 'react-router-native';
 import '../styles/SignatureDelivery.css';
-
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '../utils/api';
 
 const validationSchema = Yup.object().shape({
   grado: Yup.string().required('El grado es requerido'),
@@ -77,8 +76,14 @@ const SignatureDelivery = () => {
 
   const handleSubmit = async values => {
     console.log('=== SignatureDelivery - handleSubmit ===');
+    console.log('User Agent:', navigator.userAgent);
     console.log('Valores del formulario:', values);
     console.log('Imagen de firma:', signatureImage ? 'Presente' : 'No presente');
+    if (signatureImage) {
+      console.log('Longitud de la firma:', signatureImage.length);
+      console.log('Primeros 100 caracteres de la firma:', signatureImage.substring(0, 100));
+      console.log('¿Base64?', signatureImage.startsWith('data:image'));
+    }
     console.log('BitacoraId a enviar:', bitacoraId);
 
     if (!bitacoraId) {

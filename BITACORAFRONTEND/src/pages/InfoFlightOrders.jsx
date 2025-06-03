@@ -7,8 +7,7 @@ import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
 import DropdownButton from '../components/DropdownButton';
 import { useNavigate, useLocation } from 'react-router-native';
-
-const API_URL = 'http://localhost:3001/api';
+import { API_URL } from '../utils/api';
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({

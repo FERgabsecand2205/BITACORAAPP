@@ -8,9 +8,7 @@ import LargeButton from '../components/LargeButton';
 import DropdownButton from '../components/DropdownButton';
 import DatePickerField from '../components/DatePickerField';
 import { useNavigate, useLocation } from 'react-router-native';
-
-const API_URL = 'http://localhost:3001/api';
-//const API_URL_RENDER = 'https://bitacoraapp.onrender.com/api'; para PROD
+import { API_URL } from '../utils/api';
 
 const validationSchema = Yup.object().shape({
   lugarSalida: Yup.string()

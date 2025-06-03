@@ -5,6 +5,7 @@ import LayoutScrollViewPage from '../components/LayoutScrollViewPage';
 import HeaderTitle from '../components/HeaderTitle';
 import LargeButton from '../components/LargeButton';
 import { useNavigate, useLocation } from 'react-router-native';
+import { API_URL } from '../utils/api';
 
 const Comments = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const Comments = () => {
       }
 
       // 1. Actualizar la bitácora con los comentarios
-      const updateResponse = await fetch(`http://localhost:3001/api/bitacora/id/${bitacoraId}`, {
+      const updateResponse = await fetch(`${API_URL}/bitacora/id/${bitacoraId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -34,12 +35,9 @@ const Comments = () => {
       }
 
       // 2. Exportar a Excel
-      const excelResponse = await fetch(
-        `http://localhost:3001/api/bitacora/${bitacoraId}/export-excel`,
-        {
-          method: 'POST',
-        },
-      );
+      const excelResponse = await fetch(`${API_URL}/bitacora/${bitacoraId}/export-excel`, {
+        method: 'POST',
+      });
 
       if (!excelResponse.ok) {
         throw new Error('Error al exportar a Excel');
@@ -56,7 +54,17 @@ const Comments = () => {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      Alert.alert('Éxito', 'Bitácora exportada exitosamente');
+      // 4. Limpiar la base de datos llamando al endpoint del backend
+      const resetResponse = await fetch(`${API_URL}/bitacora/reset-db`, {
+        method: 'POST',
+      });
+      if (!resetResponse.ok) {
+        throw new Error('Error al limpiar la base de datos');
+      }
+      const resetData = await resetResponse.json();
+      console.log('Respuesta de limpieza de base de datos:', resetData);
+
+      Alert.alert('Éxito', 'Bitácora exportada y base de datos limpiada exitosamente');
       navigate('/'); // Volver a la página principal
     } catch (error) {
       console.error('Error:', error);

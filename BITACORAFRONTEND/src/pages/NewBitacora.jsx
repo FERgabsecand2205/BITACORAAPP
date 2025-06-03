@@ -6,9 +6,7 @@ import { useNavigate } from 'react-router-native'; // Importar useNavigate
 import LayoutPage from '../components/LayoutPage'; // Importar LayoutPage
 import HeaderTitle from '../components/HeaderTitle'; // Importar HeaderTitle
 import LargeButton from '../components/LargeButton'; // Importar LargeButton
-
-const API_URL = 'http://localhost:3001/api';
-//const API_URL_RENDER = 'https://bitacoraapp.onrender.com/api'; para PROD
+import { API_URL } from '../utils/api';
 
 const validationSchema = Yup.object().shape({
   tipoAeronave: Yup.string()

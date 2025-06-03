@@ -8,9 +8,7 @@ import SmallButton from '../components/SmallButton';
 import SegmentedInput from '../components/SegmentedInput';
 import DatePickerField from '../components/DatePickerField';
 import { useNavigate, useLocation } from 'react-router-native';
-
-const API_URL = 'http://localhost:3001/api';
-//const API_URL_RENDER = 'https://bitacoraapp.onrender.com/api'; para PROD
+import { API_URL } from '../utils/api';
 
 // Esquema de validación con Yup
 const validationSchema = Yup.object().shape({
