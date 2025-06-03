@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/BITACORAAPP/static/css/main.e110b8be.css",
-    "main.js": "/BITACORAAPP/static/js/main.fb6e04b0.js",
-    "static/js/675.6c81696f.js": "/BITACORAAPP/static/js/675.6c81696f.js",
+    "main.css": "/BITACORAAPP/static/css/main.35d1b5f7.css",
+    "main.js": "/BITACORAAPP/static/js/main.13818b5f.js",
+    "static/js/675.8071b6b4.js": "/BITACORAAPP/static/js/675.8071b6b4.js",
     "static/media/Ionicons.ttf": "/BITACORAAPP/static/media/Ionicons.9b6b1954a5eb6efeaf11.ttf",
     "favicon.ico": "/BITACORAAPP/favicon.ico",
     "index.html": "/BITACORAAPP/index.html",
@@ -10,13 +10,13 @@
     "favicon-16.png": "/BITACORAAPP/favicon-16.png",
     "manifest.json": "/BITACORAAPP/manifest.json",
     "serve.json": "/BITACORAAPP/serve.json",
-    "main.e110b8be.css.map": "/BITACORAAPP/static/css/main.e110b8be.css.map",
-    "main.fb6e04b0.js.map": "/BITACORAAPP/static/js/main.fb6e04b0.js.map",
-    "675.6c81696f.js.map": "/BITACORAAPP/static/js/675.6c81696f.js.map"
+    "main.35d1b5f7.css.map": "/BITACORAAPP/static/css/main.35d1b5f7.css.map",
+    "main.13818b5f.js.map": "/BITACORAAPP/static/js/main.13818b5f.js.map",
+    "675.8071b6b4.js.map": "/BITACORAAPP/static/js/675.8071b6b4.js.map"
   },
   "entrypoints": [
-    "static/js/675.6c81696f.js",
-    "static/css/main.e110b8be.css",
-    "static/js/main.fb6e04b0.js"
+    "static/js/675.8071b6b4.js",
+    "static/css/main.35d1b5f7.css",
+    "static/js/main.13818b5f.js"
   ]
 }
